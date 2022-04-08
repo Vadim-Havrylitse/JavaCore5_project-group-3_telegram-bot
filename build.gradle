@@ -1,0 +1,32 @@
+plugins {
+    id 'java'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+repositories {
+    mavenCentral()
+}
+sourceSets{
+    main {
+        java{
+            srcDir 'src/main/java'
+        }
+    }
+
+    test {
+        java{
+            srcDir 'src/test/java'
+        }
+    }
+}
+
+dependencies {
+    implementation group: 'org.telegram', name: 'telegrambots', version: '5.7.1'
+
+
+}
+
+test {
+    useJUnitPlatform()
+}
