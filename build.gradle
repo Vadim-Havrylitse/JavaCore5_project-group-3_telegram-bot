@@ -23,8 +23,10 @@ sourceSets{
 
 dependencies {
     implementation group: 'org.telegram', name: 'telegrambots', version: '5.7.1'
-
-
+    implementation group: 'org.jsoup', name: 'jsoup', version: '1.14.3'
+    implementation group: 'com.google.code.gson', name: 'gson', version: '2.9.0'
+    implementation group: 'org.projectlombok', name: 'lombok', version: '1.18.22'
+    annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.22'
 }
 
 test {
