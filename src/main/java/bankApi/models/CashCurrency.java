@@ -11,5 +11,5 @@ public class CashCurrency {
     private BankName bankName;
     private LocalDate date;
     private Double valueBuy;
-    private Double valueSell;
+    private Double valueSale;
 }
