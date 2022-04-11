@@ -1,13 +1,14 @@
 package user;
 
-public enum Bank {
-    PRIVAT("PrivatBank"),
-    MONO("Monobank"),
-    NBU("NBU");
+public enum Accuracy {
+    TWO (2),
+    THREE (3),
+    FOUR (4);
 
-    private String name;
+    private int accuracy;
 
-    Bank(String name) {
-        this.name = name;
+    Accuracy(int accuracy) {
+        this.accuracy = accuracy;
     }
+
 }

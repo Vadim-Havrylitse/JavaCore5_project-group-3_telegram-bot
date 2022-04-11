@@ -1,13 +1,24 @@
 package user;
 
-public enum Accuracy {
-    TWO (2),
-    THREE (3),
-    FOUR (4);
+public enum Notification {
+    NINE  (9, 0),
+    TEN  (10, 0),
+    ELEVEN  (11, 0),
+    TWELVE  (12, 0),
+    THIRTEEN  (13, 0),
+    FOURTEEN  (14, 0),
+    FIFTEEN  (15, 0),
+    SIXTEEN  (16, 0),
+    SEVENTEEN  (17, 0),
+    EIGHTEEN  (19, 0),
+    SHUTDOWN  (0, 0);
 
-    private int accuracy;
+    private int hour;
+    private int minute;
 
-    Accuracy(int accuracy) {
-        this.accuracy = accuracy;
+    Notification(int hour, int minute)
+    {
+        this.hour = hour;
+        this.minute = minute;
     }
 }
