@@ -8,7 +8,6 @@ public class AppLauncher {
     @SneakyThrows
     public static void main(String[] args)  {
 
-
         TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
         botsApi.registerBot(new TelegramApi());
 
