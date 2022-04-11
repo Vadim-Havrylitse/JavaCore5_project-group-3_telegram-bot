@@ -8,20 +8,6 @@ repositories {
     mavenCentral()
 }
 
-sourceSets{
-    main {
-        java{
-            srcDir 'src/main/java'
-        }
-    }
-
-    test {
-        java{
-            srcDir 'src/test/java'
-        }
-    }
-}
-
 dependencies {
     implementation group: 'org.telegram', name: 'telegrambots', version: '5.7.1'
     implementation group: 'org.jsoup', name: 'jsoup', version: '1.14.3'
