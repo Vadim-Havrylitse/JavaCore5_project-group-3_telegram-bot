@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+import org.telegram.telegrambots.meta.api.objects.Message;
 
 @Getter
 @AllArgsConstructor
@@ -23,8 +24,8 @@ public enum CommandBank implements CommandsWithMark {
     @Override
     public EditMessageReplyMarkup pressButton(CallbackQuery callbackQuery, UserService userService) {
         EditMessageReplyMarkup answerMessage = new EditMessageReplyMarkup();
-
-        userService.changeBank(callbackQuery.getMessage(), this);
+        Message message = callbackQuery.getMessage();
+        userService.changeBank(message, this);
 
         answerMessage.setChatId(callbackQuery.getMessage().getChatId().toString());
         answerMessage.setMessageId(callbackQuery.getMessage().getMessageId());
