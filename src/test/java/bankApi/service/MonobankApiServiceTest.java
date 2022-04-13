@@ -14,10 +14,10 @@ public class MonobankApiServiceTest {
 
     @Test
     public void getBankCurrency(){
-        List<MononankResponse> privatBankResponseList = monobankApiService.getBankCurrency();
-        assertFalse(privatBankResponseList.isEmpty());
-        assertEquals("UAH", privatBankResponseList.get(0).getBase_ccy());
-        privatBankResponseList.forEach(System.out::println);
+        List<MononankResponse> monobankBankResponseList = monobankApiService.getBankCurrency();
+        assertFalse(monobankBankResponseList.isEmpty());
+        assertEquals("UAH", monobankBankResponseList.get(0).getBase_ccy());
+        monobankBankResponseList.forEach(System.out::println);
     }
 
     @Test
@@ -27,7 +27,7 @@ public class MonobankApiServiceTest {
         assertNotEquals(0.0, cashCurrency.getValueBuy());
         assertNotEquals(0.0, cashCurrency.getValueSale());
         assertEquals(Currency.EUR, cashCurrency.getCurrency());
-        assertEquals(BankName.PRIVAT, cashCurrency.getBankName());
+        assertEquals(BankName.MONO, cashCurrency.getBankName());
         assertEquals(LocalDate.now(), cashCurrency.getDate());
         System.out.println("cashCurrency = " + cashCurrency);
     }
