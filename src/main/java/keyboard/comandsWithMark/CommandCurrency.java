@@ -1,6 +1,7 @@
 package keyboard.comandsWithMark;
 
 import Setting.UserService;
+import keyboard.Keyboard;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
@@ -21,6 +22,16 @@ public enum CommandCurrency implements CommandsWithMark {
 
     @Override
     public EditMessageReplyMarkup pressButton(CallbackQuery callbackQuery, UserService userService) {
-        return null;
+        EditMessageReplyMarkup answerMessage = new EditMessageReplyMarkup();
+
+        userService.changeCurrency(callbackQuery.getMessage(), this);
+
+        answerMessage.setChatId(callbackQuery.getMessage().getChatId().toString());
+        answerMessage.setMessageId(callbackQuery.getMessage().getMessageId());
+        answerMessage.setReplyMarkup(
+                Keyboard.createKeyboardWithMark(
+                        userService.getUser(callbackQuery.getMessage()).getCurrency(), CommandCurrency.values()));
+
+        return answerMessage;
     }
 }

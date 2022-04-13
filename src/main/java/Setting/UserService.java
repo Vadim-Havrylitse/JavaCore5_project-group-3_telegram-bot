@@ -1,7 +1,11 @@
 package Setting;
 
+import keyboard.comandsWithMark.CommandAccuracy;
+import keyboard.comandsWithMark.CommandBank;
+import keyboard.comandsWithMark.CommandCurrency;
 import keyboard.comandsWithMark.CommandNotification;
 import org.telegram.telegrambots.meta.api.objects.Message;
+import user.User;
 
 
 import java.util.ArrayList;
@@ -57,6 +61,23 @@ public class UserService {
     public void changeSchedule(Message message, CommandNotification time) {
         getUser(message).setNotificationTime(time);
     }
+
+    public void changeBank(Message message, CommandBank bank) {
+        getUser(message).setBank(bank);
+    }
+
+    public void changeAccuracy(Message message, CommandAccuracy accuracy) {
+        getUser(message).setAccuracy(accuracy);
+    }
+
+    public void changeCurrency(Message message, CommandCurrency currency) {
+        getUser(message).setCurrency(currency);
+    }
+
+
+
+
+
 }
 
 

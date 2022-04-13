@@ -1,6 +1,5 @@
 package telegramService;
 
-import Setting.Planner;
 import Setting.UserService;
 import keyboard.Keyboard;
 import keyboard.comandsMain.CommandMain;
@@ -29,7 +28,7 @@ public class TelegramApi extends TelegramLongPollingBot {
         commandsWithMarkBase.addAll(List.of(CommandBank.values()));
         commandsWithMarkBase.addAll(List.of(CommandCurrency.values()));
         commandsWithMarkBase.addAll(List.of(CommandNotification.values()));
-        commandsWithMarkBase.addAll(List.of(CommandNumberOfSymbols.values()));
+        commandsWithMarkBase.addAll(List.of(CommandAccuracy.values()));
 
     }
 

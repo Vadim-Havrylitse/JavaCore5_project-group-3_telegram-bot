@@ -1,71 +1,38 @@
 package user;
 
+import keyboard.comandsWithMark.CommandAccuracy;
+import keyboard.comandsWithMark.CommandBank;
+import keyboard.comandsWithMark.CommandCurrency;
+import keyboard.comandsWithMark.CommandNotification;
+import lombok.Data;
+
+@Data
 public class User {
-    int id;
-    Bank bank;
-    Accuracy accuracy;
-    Currency currency;
-    Notification notification;
+    private final Long chatId;
+    private CommandBank bank;
+    private CommandAccuracy accuracy;
+    private CommandCurrency currency;
+    private CommandNotification notificationTime;
 
     {
-        bank = Bank.PRIVAT;
-        accuracy = Accuracy.TWO;
-        currency = Currency.USD;
-        notification = Notification.TWELVE;
+        bank = CommandBank.PRIVAT;
+        accuracy = CommandAccuracy.TWO;
+        currency = CommandCurrency.USD;
+        notificationTime = CommandNotification.NOTIFICATION_OFF;
     }
 
-    User (int id) {
-        this.id = id;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public Bank getBank() {
-        return bank;
-    }
-
-    public void setBank(Bank bank) {
-        this.bank = bank;
-    }
-
-    public Accuracy getAccuracy() {
-        return accuracy;
-    }
-
-    public void setAccuracy(Accuracy accuracy) {
-        this.accuracy = accuracy;
-    }
-
-    public Currency getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(Currency currency) {
-        this.currency = currency;
-    }
-
-    public Notification getNotification() {
-        return notification;
-    }
-
-    public void setNotification(Notification notification) {
-        this.notification = notification;
+    public User(Long id) {
+        this.chatId = id;
     }
 
     @Override
     public String toString() {
         return "User{" +
-                "id=" + id +
+                "id=" + chatId +
                 ", bank=" + bank +
                 ", accuracy=" + accuracy +
                 ", currency=" + currency +
-                ", notification=" + notification +
+                ", notification=" + notificationTime +
                 '}';
     }
 }

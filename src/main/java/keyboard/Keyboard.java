@@ -27,17 +27,34 @@ public class Keyboard {
         return keyboardMarkup;
     }
 
+    public static InlineKeyboardMarkup createKeyboardWithMark(CommandsWithMark commands, CommandsWithMark[] arrCommands){
+        String mark = commands.getTitle();
+        InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rowsButton = new ArrayList<>();
+        for (CommandsWithMark element : arrCommands) {
+            rowsButton.add(
+                    List.of(
+                            InlineKeyboardButton.builder()
+                                    .text(element.getTitle().equals(mark) ?  "✅"+element.getTitle() : element.getTitle())
+                                    .callbackData(element.getCallbackData())
+                                    .build()));
+        }
+        keyboardMarkup.setKeyboard(rowsButton);
+        return keyboardMarkup;
+    }
+
     public static InlineKeyboardMarkup createKeyboardForTimeAlert(Message message, UserService userService, CommandsWithMark[] arrTimeAlert) {
         CommandsWithMark timeAlert = userService.getUser(message).getNotificationTime();
 
         InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
 
         List<List<InlineKeyboardButton>> rowsList = new ArrayList<>();
-        System.out.println(arrTimeAlert.length + " " + (int)Math.ceil((arrTimeAlert.length / 3f)));
-        for (int i = 0; i < ((int)Math.ceil(arrTimeAlert.length / 3f)); i++) {
+        for (int i = 0; i < ((int) Math.ceil(arrTimeAlert.length / 3f)); i++) {
             List<InlineKeyboardButton> keyboardButtonsRow = new ArrayList<>();
             for (int j = 0; j < 3; j++) {
-                if ((i * 3 + j ) == arrTimeAlert.length){ break;}
+                if ((i * 3 + j) == arrTimeAlert.length) {
+                    break;
+                }
                 CommandsWithMark command = arrTimeAlert[i * 3 + j];
                 String commandTitle = command.getTitle();
                 InlineKeyboardButton button = new InlineKeyboardButton();
@@ -48,21 +65,6 @@ public class Keyboard {
             rowsList.add(keyboardButtonsRow);
         }
         keyboardMarkup.setKeyboard(rowsList);
-        return  keyboardMarkup;
-    }
-
-    public static InlineKeyboardMarkup createKeyboardWithMark(String mark, CommandsWithMark[] arrBank){
-        InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
-        List<List<InlineKeyboardButton>> rowsButton = new ArrayList<>();
-        for (CommandsWithMark element : arrBank) {
-            rowsButton.add(
-                    List.of(
-                            InlineKeyboardButton.builder()
-                                    .text(element.getTitle().equals(mark) ?  "✅"+element.getTitle() : element.getTitle())
-                                    .callbackData(element.getCallbackData())
-                                    .build()));
-        }
-        keyboardMarkup.setKeyboard(rowsButton);
         return keyboardMarkup;
     }
 

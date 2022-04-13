@@ -12,7 +12,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 @Getter
 @AllArgsConstructor
 public enum CommandSettings implements CommandsMain {
-    NUMBEROFSYNBOLS("Кол-во знаков после зяпятой",
+    ACCURACY("Кол-во знаков после зяпятой",
             "NumberOfSymbols",
             "Выберите желаемое количество:"),
     BANK("Банк",
@@ -34,17 +34,17 @@ public enum CommandSettings implements CommandsMain {
         SendMessage answerMessage = new SendMessage();
         InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
         switch (this){
-            case NUMBEROFSYNBOLS:
+            case ACCURACY:
                 //userService.getUser(callbackQuery.getMessage()).getNumberOfSymbols;
-                keyboardMarkup = Keyboard.createKeyboardWithMark("2", CommandNumberOfSymbols.values());
+                keyboardMarkup = Keyboard.createKeyboardWithMark(userService.getUser(callbackQuery.getMessage()).getAccuracy(), CommandAccuracy.values());
                 break;
             case BANK:
                 //userService.getUser(callbackQuery.getMessage()).getBank;
-                keyboardMarkup = Keyboard.createKeyboardWithMark("PrivatBank", CommandBank.values());
+                keyboardMarkup = Keyboard.createKeyboardWithMark(userService.getUser(callbackQuery.getMessage()).getBank(), CommandBank.values());
                 break;
             case CURRENCY:
                 //userService.getUser(callbackQuery.getMessage()).getCurrency;
-                keyboardMarkup = Keyboard.createKeyboardWithMark("USD", CommandCurrency.values());
+                keyboardMarkup = Keyboard.createKeyboardWithMark(userService.getUser(callbackQuery.getMessage()).getCurrency(), CommandCurrency.values());
                 break;
             case NOTIFICATION:
                 keyboardMarkup = Keyboard.createKeyboardForTimeAlert(callbackQuery.getMessage(), userService, CommandNotification.values());
