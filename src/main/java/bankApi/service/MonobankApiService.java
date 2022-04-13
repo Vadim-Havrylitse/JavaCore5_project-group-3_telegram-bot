@@ -1,20 +1,14 @@
 package bankApi.service;
 
 import bankApi.models.*;
-
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.function.Predicate;
 
-import static bankApi.service.BaseBankApiInterface.gsonMapper;
-import static bankApi.service.BaseBankApiInterface.httpClient;
 
 public class MonobankApiService implements BaseBankApiInterface<MononankResponse> {
     private static final String MONO_URL = "https://api.monobank.ua/bank/currency";
@@ -55,11 +49,11 @@ public class MonobankApiService implements BaseBankApiInterface<MononankResponse
 
     private void setCurrencyToCash(MononankResponse bankResponse){
         CashCurrency cashCurrency = new CashCurrency();
-        cashCurrency.setCurrency(Currency.valueOf(bankResponse.getCcy()));
+        cashCurrency.setCurrency(Currency.valueOf(bankResponse.getCurrencyCodeA().toString()));
         cashCurrency.setDate(LocalDate.now());
         cashCurrency.setBankName(BankName.MONO);
-        cashCurrency.setValueBuy(Double.valueOf(bankResponse.getBuy()));
-        cashCurrency.setValueSale(Double.valueOf(bankResponse.getSale()));
+        cashCurrency.setValueBuy(Double.valueOf(bankResponse.getRateBuy().toString()));
+        cashCurrency.setValueSale(Double.valueOf(bankResponse.getRateSell().toString()));
         CashService.getCashCurrencyMap().put(getKey(cashCurrency.getCurrency()), cashCurrency);
     }
 

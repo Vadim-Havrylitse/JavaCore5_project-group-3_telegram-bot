@@ -16,7 +16,7 @@ public class MonobankApiServiceTest {
     public void getBankCurrency(){
         List<MononankResponse> monobankBankResponseList = monobankApiService.getBankCurrency();
         assertFalse(monobankBankResponseList.isEmpty());
-        assertEquals("UAH", monobankBankResponseList.get(0).getBase_ccy());
+        assertEquals("UAH", monobankBankResponseList.get(0).getCurrencyCodeA());
         monobankBankResponseList.forEach(System.out::println);
     }
 
