@@ -4,8 +4,10 @@ import lombok.Data;
 
 @Data
 public class MononankResponse {
-    private String ccy;
-    private String base_ccy;
-    private String buy;
-    private String sale;
+    private Integer currencyCodeA;
+    private Integer currencyCodeB;
+    private Long date;
+    private Double rateSell;
+    private Double rateBuy;
+    private Double rateCross;
 }
