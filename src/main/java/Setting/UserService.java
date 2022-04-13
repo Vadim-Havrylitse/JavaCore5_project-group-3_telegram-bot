@@ -8,8 +8,12 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import user.User;
 
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class UserService {
 
@@ -74,7 +78,21 @@ public class UserService {
         getUser(message).setCurrency(currency);
     }
 
+    public boolean isUserPresent (Message message) throws IOException {
+    // вытащили из файла строку
 
+        String src = "g:/IdeaProjects/test/src/main/java/userList.json";
+
+        String result = Files.lines(Paths.get(src)).collect(Collectors.joining());
+
+    //из него сделали лист юзеров usersList
+
+
+        List<User> usersList = new ArrayList<>();
+        boolean result = usersList.stream().
+                anyMatch(user-> user.getChatId().equals(message.getChatId()));
+        return result;
+    }
 
 
 
