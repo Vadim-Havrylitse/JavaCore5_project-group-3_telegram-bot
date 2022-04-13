@@ -1,32 +1,36 @@
 package telegramService;
 
-import keyboard.*;
+import Setting.Planner;
+import Setting.UserService;
+import keyboard.Keyboard;
+import keyboard.comandsMain.CommandMain;
+import keyboard.comandsMain.CommandSettings;
+import keyboard.comandsMain.CommandsMain;
+import keyboard.comandsWithMark.*;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import utils.PropertiesLoad;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TelegramApi extends TelegramLongPollingBot {
 
-    public static Map<Commands, Commands[]> commandsBase = new HashMap<>();
+    private final UserService userService = UserService.create();
 
+    public static List<CommandsMain> commandsMainBase = new ArrayList<>();
+    public static List<CommandsWithMark> commandsWithMarkBase = new ArrayList<>();
     static {
-        commandsBase.put(CommandMain.GETINFO, CommandMain.values());
-        commandsBase.put(CommandMain.SETTINGS, CommandSettings.values());
-        commandsBase.put(CommandSettings.BANK, CommandBank.values());
-        commandsBase.put(CommandSettings.CURRENCY, CommandCurrency.values());
-        commandsBase.put(CommandSettings.NOTIFICATION, CommandNumberOfSymbols.values());
-        commandsBase.put(CommandSettings.NUMBEROFSYNBOLS, CommandMain.values());
-        commandsBase.put(CommandBank.MONO, null);
-        commandsBase.put(CommandBank.PRIVAT, null);
-        commandsBase.put(CommandBank.NBU, null);
-        commandsBase.put(CommandCurrency.BTC, null);
-        commandsBase.put(CommandCurrency.EUR, null);
-        commandsBase.put(CommandCurrency.USD, null);
+        commandsMainBase.addAll(List.of(CommandMain.values()));
+        commandsMainBase.addAll(List.of(CommandSettings.values()));
+
+        commandsWithMarkBase.addAll(List.of(CommandBank.values()));
+        commandsWithMarkBase.addAll(List.of(CommandCurrency.values()));
+        commandsWithMarkBase.addAll(List.of(CommandNotification.values()));
+        commandsWithMarkBase.addAll(List.of(CommandNumberOfSymbols.values()));
+
     }
 
     @Override
@@ -43,11 +47,13 @@ public class TelegramApi extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
 
         if (update.hasMessage() && update.getMessage().hasText()) {
+            if (userService.getUser(update.getMessage()) == null){
+                userService.addUser(update.getMessage());
+            }
             SendMessage message = new SendMessage();
                 message.setText(update.getMessage().getText());
                 message.setChatId(update.getMessage().getChatId().toString());
-                message.setReplyMarkup(Keyboard.createKeyboardInline(TelegramApi.commandsBase.get(CommandMain.GETINFO)));
-                message.enableMarkdown(true);
+                message.setReplyMarkup(Keyboard.createKeyboardInOneColumn(CommandMain.values()));
             try {
                 execute(message);
             } catch (TelegramApiException e) {
@@ -55,21 +61,27 @@ public class TelegramApi extends TelegramLongPollingBot {
             }
         }
 
-        if (update.hasCallbackQuery()){
+        if (update.hasCallbackQuery()) {
             String updateCallbackData = update.getCallbackQuery().getData();
-            SendMessage message = new SendMessage();
-            System.out.println(update.getCallbackQuery().toString());
-            for (Commands el : TelegramApi.commandsBase.keySet()) {
+
+            for (CommandsMain el : commandsMainBase) {
                 if (el.getCallbackData().equals(updateCallbackData)) {
-                    message = el.pressButton(message, TelegramApi.commandsBase.get(el));
-                    break;
+                    try {
+                        execute(el.pressButton(update.getCallbackQuery(), userService));
+                    } catch (TelegramApiException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
-            message.setChatId(update.getCallbackQuery().getFrom().getId().toString());
-            try {
-                execute(message);
-            } catch (TelegramApiException e) {
-                e.printStackTrace();
+
+            for (CommandsWithMark el : commandsWithMarkBase){
+                if (el.getCallbackData().equals(updateCallbackData)){
+                    try {
+                        execute(el.pressButton(update.getCallbackQuery(), userService));
+                    } catch (TelegramApiException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
 

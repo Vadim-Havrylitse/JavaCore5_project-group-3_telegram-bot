@@ -1,26 +1,29 @@
 package Setting;
 
+import keyboard.comandsWithMark.CommandNotification;
+
 import java.util.Objects;
 
 public class User {
 
 
     private final Long chatId;
-    private byte notificationTime;
+    private CommandNotification notificationTime;
 
     public User(Long chatId) {
         this.chatId = chatId;
+        this.notificationTime = CommandNotification.NOTIFICATION_OFF;
     }
 
     public Long getChatId() {
         return chatId;
     }
 
-    public byte getNotificationTime() {
+    public CommandNotification getNotificationTime() {
         return notificationTime;
     }
 
-    public void setNotificationTime(byte notificationTime) {
+    public void setNotificationTime(CommandNotification notificationTime) {
         this.notificationTime = notificationTime;
     }
 

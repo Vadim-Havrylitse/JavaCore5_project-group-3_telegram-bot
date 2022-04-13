@@ -1,5 +1,6 @@
 package Setting;
 
+import keyboard.comandsWithMark.CommandNotification;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 
@@ -53,7 +54,7 @@ public class UserService {
         }
     }
 
-    public void changeSchedule(Message message, byte time) {
+    public void changeSchedule(Message message, CommandNotification time) {
         getUser(message).setNotificationTime(time);
     }
 }
