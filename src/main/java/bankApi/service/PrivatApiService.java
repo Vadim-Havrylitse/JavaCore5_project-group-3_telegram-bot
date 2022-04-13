@@ -13,7 +13,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PrivatApiService implements BaseBankApiInterf<PrivatBankResponse> {
+public class PrivatApiService implements BaseBankApiInterface<PrivatBankResponse> {
 
     private final static String PRIVATE_URL = "https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5";
 
