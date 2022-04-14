@@ -1,5 +1,6 @@
 package Setting;
 
+import com.google.gson.reflect.TypeToken;
 import keyboard.comandsWithMark.CommandAccuracy;
 import keyboard.comandsWithMark.CommandBank;
 import keyboard.comandsWithMark.CommandCurrency;
@@ -83,10 +84,21 @@ public class UserService {
 
         String src = "g:/IdeaProjects/test/src/main/java/userList.json";
 
-        String result = Files.lines(Paths.get(src)).collect(Collectors.joining());
+        String fileContetn = Files.lines(Paths.get(src)).collect(Collectors.joining());
 
     //из него сделали лист юзеров usersList
-
+        
+        static List<User> readingUsersFromFile() {
+            String src = "g:/IdeaProjects/test/src/main/java/userList.json";
+            List<User> userList = new ArrayList<>();
+            try {
+                String fileContents = Files.lines(Paths.get(src)).collect(Collectors.joining());
+                userList = GSON.fromJson(fileContents,  new TypeToken<List<User>>() {
+                }.getType());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return userList;
 
         List<User> usersList = new ArrayList<>();
         boolean result = usersList.stream().
