@@ -15,9 +15,9 @@ public class CashService {
 
     public static synchronized Map<String, CashCurrency> getCashCurrencyMap() {
 
-            if (cashCurrencyMap == null) {
-                cashCurrencyMap = new HashMap<>();
-            }
-            return cashCurrencyMap;
+        if (cashCurrencyMap == null) {
+            cashCurrencyMap = new HashMap<>();
+        }
+        return cashCurrencyMap;
     }
 }

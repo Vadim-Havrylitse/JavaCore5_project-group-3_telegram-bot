@@ -5,7 +5,7 @@ import lombok.ToString;
 
 @ToString
 @Data
-public class PrivatBankResponse implements BaseBankResponse{
+public class PrivatBankResponse implements BaseBankResponseInterface {
     private String ccy;
     private String base_ccy;
     private String buy;

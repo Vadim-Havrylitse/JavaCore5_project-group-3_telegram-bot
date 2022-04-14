@@ -1,10 +1,6 @@
 package bankApi.service;
 
-import bankApi.models.BankName;
-import bankApi.models.CashCurrency;
-import bankApi.models.Currency;
-import bankApi.models.PrivatBankResponse;
-
+import bankApi.models.*;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpRequest;
@@ -13,22 +9,22 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PrivatApiService implements BaseBankApiInterface<PrivatBankResponse> {
 
-    private final static String PRIVATE_URL = "https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5";
+public class MonobankApiService implements BaseBankApiInterface<MononankResponse> {
+    private static final String MONO_URL = "https://api.monobank.ua/bank/currency";
 
     @Override
-    public List<PrivatBankResponse> getBankCurrency() {
+    public List<MononankResponse> getBankCurrency() {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(PRIVATE_URL))
+                .uri(URI.create(MONO_URL))
                 .header("Content-Type", "application/json; charset=UTF-8")
                 .GET()
                 .build();
-        List<PrivatBankResponse> response = new ArrayList<>();
+        List<MononankResponse> response = new ArrayList<>();
         try {
             HttpResponse<String> httpResponse = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             if(httpResponse.statusCode() == 200 && !httpResponse.body().isEmpty()) {
-                response = gsonMapper.mapJsonToListPrivatBankResponse(httpResponse.body());
+                response = gsonMapper.mapJsonToListMonobankResponse(httpResponse.body());
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
@@ -46,22 +42,22 @@ public class PrivatApiService implements BaseBankApiInterface<PrivatBankResponse
                 return lastCashCurrency;
             }
         }
-            List<PrivatBankResponse> bankResponse = getBankCurrency();
-            bankResponse.forEach(this::setCurrencyToCash);
-            return CashService.getCashCurrencyMap().get(key);
-       }
+        List<MononankResponse> bankResponse = getBankCurrency();
+        bankResponse.forEach(this::setCurrencyToCash);
+        return CashService.getCashCurrencyMap().get(key);
+    }
 
-       private void setCurrencyToCash(PrivatBankResponse bankResponse){
+    private void setCurrencyToCash(MononankResponse bankResponse){
         CashCurrency cashCurrency = new CashCurrency();
-        cashCurrency.setCurrency(Currency.valueOf(bankResponse.getCcy()));
+        cashCurrency.setCurrency(Currency.valueOf(bankResponse.getCurrencyCodeA().toString()));
         cashCurrency.setDate(LocalDate.now());
-        cashCurrency.setBankName(BankName.PRIVAT);
-        cashCurrency.setValueBuy(Double.valueOf(bankResponse.getBuy()));
-        cashCurrency.setValueSale(Double.valueOf(bankResponse.getSale()));
+        cashCurrency.setBankName(BankName.MONO);
+        cashCurrency.setValueBuy(Double.valueOf(bankResponse.getRateBuy().toString()));
+        cashCurrency.setValueSale(Double.valueOf(bankResponse.getRateSell().toString()));
         CashService.getCashCurrencyMap().put(getKey(cashCurrency.getCurrency()), cashCurrency);
-       }
+    }
 
-       private String getKey(Currency currency){
-        return BankName.PRIVAT.name() + currency;
-       }
+    private String getKey(Currency currency){
+        return BankName.MONO.name() + currency;
+    }
 }
