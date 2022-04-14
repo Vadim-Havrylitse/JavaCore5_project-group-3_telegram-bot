@@ -1,23 +1,23 @@
 package user;
 
-import keyboard.comandsWithMark.CommandAccuracy;
-import keyboard.comandsWithMark.CommandBank;
-import keyboard.comandsWithMark.CommandCurrency;
-import keyboard.comandsWithMark.CommandNotification;
+import keyboard.comandsWithMark.*;
 import lombok.Data;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class User {
     private final Long chatId;
-    private CommandBank bank;
+    private List<CommandsWithMark> bank;
     private CommandAccuracy accuracy;
-    private CommandCurrency currency;
+    private List<CommandsWithMark> currency;
     private CommandNotification notificationTime;
 
     {
-        bank = CommandBank.PRIVAT;
+        bank = new ArrayList<>(List.of(CommandBank.PRIVAT));
         accuracy = CommandAccuracy.TWO;
-        currency = CommandCurrency.USD;
+        currency = new ArrayList<>(List.of(CommandCurrency.USD));
         notificationTime = CommandNotification.NOTIFICATION_OFF;
     }
 
@@ -29,9 +29,9 @@ public class User {
     public String toString() {
         return "User{" +
                 "id=" + chatId +
-                ", bank=" + bank +
+                ", bank=" + bank.toString() +
                 ", accuracy=" + accuracy +
-                ", currency=" + currency +
+                ", currency=" + currency.toString() +
                 ", notification=" + notificationTime +
                 '}';
     }

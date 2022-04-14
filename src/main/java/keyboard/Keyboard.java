@@ -9,6 +9,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 public class Keyboard {
 
@@ -27,20 +28,51 @@ public class Keyboard {
         return keyboardMarkup;
     }
 
-    public static InlineKeyboardMarkup createKeyboardWithMark(CommandsWithMark commands, CommandsWithMark[] arrCommands){
-        String mark = commands.getTitle();
+    public static InlineKeyboardMarkup createKeyboardWithMark(CommandsWithMark commandsFromUser, CommandsWithMark[] arrCommandsForButtons){
         InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsButton = new ArrayList<>();
-        for (CommandsWithMark element : arrCommands) {
+        for (CommandsWithMark element : arrCommandsForButtons) {
             rowsButton.add(
                     List.of(
                             InlineKeyboardButton.builder()
-                                    .text(element.getTitle().equals(mark) ?  "✅"+element.getTitle() : element.getTitle())
+                                    .text(textOfTheSelectedOrUnselectedButton(commandsFromUser, element))
                                     .callbackData(element.getCallbackData())
                                     .build()));
         }
         keyboardMarkup.setKeyboard(rowsButton);
         return keyboardMarkup;
+    }
+
+    public static InlineKeyboardMarkup createKeyboardWithMark(List<CommandsWithMark> commandFromUser, CommandsWithMark[] arrCommandsForButtons){
+        InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rowsButton = new ArrayList<>();
+        for (CommandsWithMark element : arrCommandsForButtons) {
+            rowsButton.add(
+                    List.of(
+                            InlineKeyboardButton.builder()
+                                    .text(textOfTheSelectedOrUnselectedButton(commandFromUser, element))
+                                    .callbackData(element.getCallbackData())
+                                    .build()));
+        }
+        keyboardMarkup.setKeyboard(rowsButton);
+        return keyboardMarkup;
+    }
+
+
+    private static String textOfTheSelectedOrUnselectedButton (List<CommandsWithMark> commandsFromUser, CommandsWithMark element){
+        String answer;
+        if (commandsFromUser.stream().anyMatch(x -> x.getTitle().equals(element.getTitle()))){
+            answer = "✅ "+element.getTitle();
+        } else answer = element.getTitle();
+        return answer;
+    }
+
+    private static String textOfTheSelectedOrUnselectedButton (CommandsWithMark commandsFromUser, CommandsWithMark element){
+        String answer;
+        if (commandsFromUser.getTitle().equals(element.getTitle())){
+            answer = "✅ "+element.getTitle();
+        } else answer = element.getTitle();
+        return answer;
     }
 
     public static InlineKeyboardMarkup createKeyboardForTimeAlert(Message message, UserService userService, CommandsWithMark[] arrTimeAlert) {

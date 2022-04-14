@@ -1,9 +1,6 @@
 package Setting;
 
-import keyboard.comandsWithMark.CommandAccuracy;
-import keyboard.comandsWithMark.CommandBank;
-import keyboard.comandsWithMark.CommandCurrency;
-import keyboard.comandsWithMark.CommandNotification;
+import keyboard.comandsWithMark.*;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import user.User;
 
@@ -63,7 +60,13 @@ public class UserService {
     }
 
     public void changeBank(Message message, CommandBank bank) {
-        getUser(message).setBank(bank);
+        List<CommandsWithMark> selectedBank = getUser(message).getBank();
+        if (selectedBank.contains(bank)){
+            selectedBank.remove(bank);
+        }else {
+            selectedBank.add(bank);
+        }
+        getUser(message).setBank(selectedBank);
     }
 
     public void changeAccuracy(Message message, CommandAccuracy accuracy) {
@@ -71,7 +74,13 @@ public class UserService {
     }
 
     public void changeCurrency(Message message, CommandCurrency currency) {
-        getUser(message).setCurrency(currency);
+        List<CommandsWithMark> selectedCurrency = getUser(message).getCurrency();
+        if (selectedCurrency.contains(currency)){
+            selectedCurrency.remove(currency);
+        }else {
+            selectedCurrency.add(currency);
+        }
+        getUser(message).setCurrency(selectedCurrency);
     }
 
 
