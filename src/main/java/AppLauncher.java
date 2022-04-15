@@ -1,8 +1,13 @@
 
+import Setting.UserService;
 import lombok.SneakyThrows;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 import telegramService.TelegramApi;
+import user.User;
+
+import java.util.HashMap;
+import java.util.List;
 
 public class AppLauncher {
     @SneakyThrows
@@ -11,5 +16,7 @@ public class AppLauncher {
         TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
         botsApi.registerBot(new TelegramApi());
 
+        UserService userService = new UserService();
+        HashMap<Long, User> usersHashMap = userService.getAllUsers();
     }
 }
