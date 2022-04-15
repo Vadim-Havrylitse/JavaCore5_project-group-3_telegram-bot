@@ -71,49 +71,39 @@ public class UserService {
      }
 
      public void writeUserIntoFile(User user) {
-         System.out.println("write");
          String fileContent = getFileContent();
          StringBuffer newContent = new StringBuffer(fileContent);
          if (fileContent.equals("")) {
              newContent.append("[\n").
                      append(GSON.toJson(user)).
                      append("\n]");
-             System.out.println("write default user \n" + newContent.toString());
          } else {
              newContent.deleteCharAt(newContent.length() -1).
                      append(",\n").
                      append(GSON.toJson(user)).
                      append("\n]");
-             System.out.println("write json user \n" + newContent);
          }
-
          try {
              Files.writeString(Paths.get(SOURCE), newContent);
          } catch (IOException e) {
              e.printStackTrace();
          }
-
      }
 
     public List<User> getAllUsers() {
-
         String fileContent = getFileContent();
         if (!fileContent.equals("")) {
-            System.out.println("content != 0");
             users = GSON.fromJson(fileContent, new TypeToken<List<User>>() {
             }.getType());
-            System.out.println("from not null content - " + users.toString());
         } else {
             User defaultUser = new User(1L);
             users.add(defaultUser);
             writeUserIntoFile(defaultUser);
         }
-        System.out.println(users.toString());
         return users;
     }
 
     public User getUser(Message message) {
-        System.out.println("launched method  get User");
         List<User> users = getAllUsers();
         for (User user : users) {
             if (user.getChatId() == user.getChatId()) {
@@ -124,7 +114,6 @@ public class UserService {
     }
 
     public User addUser(Message message) {
-        System.out.println("launched method  addUser");
         if (isUserPresent(message)) { return getUser(message);}
         User newUser = new User(message.getChatId());
         users.add(newUser);
