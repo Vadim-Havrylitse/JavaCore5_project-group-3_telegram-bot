@@ -46,7 +46,8 @@ public class TelegramApi extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
 
         if (update.hasMessage() && update.getMessage().hasText()) {
-            if (userService.getUser(update.getMessage()) == null){
+            if (!userService.isUserPresent(update.getMessage())){
+                System.out.println("isUser = false");
                 userService.addUser(update.getMessage());
             }
             SendMessage message = new SendMessage();

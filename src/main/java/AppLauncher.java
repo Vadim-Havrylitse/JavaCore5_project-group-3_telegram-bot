@@ -16,7 +16,5 @@ public class AppLauncher {
         TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
         botsApi.registerBot(new TelegramApi());
 
-        UserService userService = new UserService();
-        HashMap<Long, User> usersHashMap = userService.getAllUsers();
     }
 }

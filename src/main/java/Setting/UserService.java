@@ -14,15 +14,17 @@ import user.User;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class UserService {
 
     private static UserService userService;
-    private static HashMap<Long, User> users = new HashMap<Long, User>();
+    private static List<User> users = new ArrayList<>();
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-
+    private static final String SOURCE = "src/main/resources/userList.json";
 
     public static UserService getUserService() {
         return userService;
@@ -53,16 +55,15 @@ public class UserService {
 
      public String getFileContent () {
          String fileContent = "";
-         String src = "src/main/resources/userHashMap.json";
-         if (!Files.exists(Paths.get(src))) {
+         if (!Files.exists(Paths.get(SOURCE))) {
              try {
-                 Files.createFile(Paths.get(src));
+                 Files.createFile(Paths.get(SOURCE));
              } catch (IOException e) {
                  e.printStackTrace();
              }
          }
          try {
-             fileContent = Files.lines(Paths.get(src)).collect(Collectors.joining());
+             fileContent = Files.lines(Paths.get(SOURCE)).collect(Collectors.joining());
          } catch (IOException e) {
              e.printStackTrace();
          }
@@ -70,32 +71,41 @@ public class UserService {
      }
 
      public void writeUserIntoFile(User user) {
-         StringBuffer newContent = new StringBuffer(getFileContent());
-         if (newContent.equals("")) {
-             newContent.append("[\n]");
-         } else {
-             newContent.//deleteCharAt(newContent.length()).
-                     append("[\n").
+         System.out.println("write");
+         String fileContent = getFileContent();
+         StringBuffer newContent = new StringBuffer(fileContent);
+         if (fileContent.equals("")) {
+             newContent.append("[\n").
                      append(GSON.toJson(user)).
                      append("\n]");
+             System.out.println("write default user \n" + newContent.toString());
+         } else {
+             newContent.deleteCharAt(newContent.length() -1).
+                     append(",\n").
+                     append(GSON.toJson(user)).
+                     append("\n]");
+             System.out.println("write json user \n" + newContent);
          }
-         System.out.println(newContent);
-         String src = "src/main/resources/userHashMap.json";
+
          try {
-             Files.writeString(Paths.get(src), newContent);
+             Files.writeString(Paths.get(SOURCE), newContent);
          } catch (IOException e) {
              e.printStackTrace();
          }
+
      }
 
-    public HashMap<Long, User> getAllUsers() {
+    public List<User> getAllUsers() {
+
         String fileContent = getFileContent();
         if (!fileContent.equals("")) {
-            users = GSON.fromJson(fileContent, new TypeToken<HashMap<Long, User>>() {
+            System.out.println("content != 0");
+            users = GSON.fromJson(fileContent, new TypeToken<List<User>>() {
             }.getType());
+            System.out.println("from not null content - " + users.toString());
         } else {
             User defaultUser = new User(1L);
-            users.put(1L, defaultUser);
+            users.add(defaultUser);
             writeUserIntoFile(defaultUser);
         }
         System.out.println(users.toString());
@@ -103,25 +113,28 @@ public class UserService {
     }
 
     public User getUser(Message message) {
-        HashMap<Long, User> users = getAllUsers();
-        if (users.containsKey(message.getChatId())) {
-            return users.get(message.getChatId());
-        } else {
-            return addUser(message);
+        System.out.println("launched method  get User");
+        List<User> users = getAllUsers();
+        for (User user : users) {
+            if (user.getChatId() == user.getChatId()) {
+                return user;
+            }
         }
+        return addUser(message);
     }
 
     public User addUser(Message message) {
+        System.out.println("launched method  addUser");
         if (isUserPresent(message)) { return getUser(message);}
         User newUser = new User(message.getChatId());
-        users.put(message.getChatId(), newUser);
+        users.add(newUser);
         writeUserIntoFile(newUser);
         return newUser;
     }
 
     public boolean isUserPresent (Message message) {
-       HashMap<Long, User> usersHashMap = getAllUsers();
-            return  usersHashMap.containsKey(message.getChatId());
+        List<User> users = getAllUsers();
+            return  users.stream().map(User::getChatId).anyMatch(id->id==message.getChatId());
     }
 
 }
