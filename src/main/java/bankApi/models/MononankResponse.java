@@ -7,7 +7,7 @@ public class MononankResponse {
     private Integer currencyCodeA;
     private Integer currencyCodeB;
     private Long date;
-    private Double rateSell;
-    private Double rateBuy;
-    private Double rateCross;
+    private Float rateSell;
+    private Float rateBuy;
+    private Float rateCross;
 }

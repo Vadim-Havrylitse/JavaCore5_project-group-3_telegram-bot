@@ -7,16 +7,17 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+
 
 public class MonobankApiServiceTest {
     MonobankApiService monobankApiService = new MonobankApiService();
+
 
     @Test
     public void getBankCurrency(){
         List<MononankResponse> monobankBankResponseList = monobankApiService.getBankCurrency();
         assertFalse(monobankBankResponseList.isEmpty());
-        assertEquals("UAH", monobankBankResponseList.get(0).getCurrencyCodeA());
+        assertEquals(980, monobankBankResponseList.get(0).getCurrencyCodeA());
         monobankBankResponseList.forEach(System.out::println);
     }
 
