@@ -7,7 +7,10 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
 
 
 public class MonobankApiService implements BaseBankApiInterface<MononankResponse> {
@@ -23,7 +26,7 @@ public class MonobankApiService implements BaseBankApiInterface<MononankResponse
         List<MononankResponse> response = new ArrayList<>();
         try {
             HttpResponse<String> httpResponse = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-            if(httpResponse.statusCode() == 200 && !httpResponse.body().isEmpty()) {
+            if (httpResponse.statusCode() == 200 && !httpResponse.body().isEmpty()) {
                 response = gsonMapper.mapJsonToListMonobankResponse(httpResponse.body());
             }
         } catch (IOException | InterruptedException e) {
@@ -47,17 +50,28 @@ public class MonobankApiService implements BaseBankApiInterface<MononankResponse
         return CashService.getCashCurrencyMap().get(key);
     }
 
-    private void setCurrencyToCash(MononankResponse bankResponse){
-        CashCurrency cashCurrency = new CashCurrency();
-        cashCurrency.setCurrency(Currency.valueOf(bankResponse.getCurrencyCodeA().toString()));
-        cashCurrency.setDate(LocalDate.now());
-        cashCurrency.setBankName(BankName.MONO);
-        cashCurrency.setValueBuy(Double.valueOf(bankResponse.getRateBuy().toString()));
-        cashCurrency.setValueSale(Double.valueOf(bankResponse.getRateSell().toString()));
-        CashService.getCashCurrencyMap().put(getKey(cashCurrency.getCurrency()), cashCurrency);
+    private void setCurrencyToCash(MononankResponse bankResponse) {
+        // нужно проверять есть ли получаемая валюта от банка среди енама наших валют
+        String bankResponseCodeA = bankResponse.getCurrencyCodeA().toString();
+        Optional<Currency> currency = Arrays.stream(Currency.values()).filter(x -> x.codeISOL.equals(bankResponseCodeA)).findFirst();
+        // нужно также проверять чтобы только к гривне были все результаты
+        if (currency.isPresent() && bankResponse.getCurrencyCodeB().equals(Integer.valueOf("980"))) {
+            CashCurrency cashCurrency = new CashCurrency();
+            cashCurrency.setCurrency(currency.get());
+            cashCurrency.setDate(LocalDate.now());
+            cashCurrency.setBankName(BankName.MONO);
+            // нужно предусмотреть что у банка нужные нам валюты могут быть, но продажа/покупка заморожена и приходит значение null
+            cashCurrency.setValueBuy(bankResponse.getRateBuy() != null ? bankResponse.getRateBuy(): Double.valueOf(0));
+            cashCurrency.setValueSale(bankResponse.getRateSell() != null ? bankResponse.getRateSell(): Double.valueOf(0));
+            CashService.getCashCurrencyMap().put(getKey(cashCurrency.getCurrency()), cashCurrency);
+        }
     }
+//    USD("840"),
+//    EUR("978"),
+//    GBP("826");
 
-    private String getKey(Currency currency){
-        return BankName.MONO.name() + currency;
+
+    private String getKey(Currency currency) {
+        return BankName.MONO.name() + currency.codeISOL;
     }
 }
