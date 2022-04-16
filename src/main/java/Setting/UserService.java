@@ -1,5 +1,7 @@
 package Setting;
 
+
+import keyboard.comandsWithMark.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -42,7 +44,13 @@ public class UserService {
     }
 
     public void changeBank(Message message, CommandBank bank) {
-        getUser(message).setBank(bank);
+        List<CommandsWithMark> selectedBank = getUser(message).getBank();
+        if (selectedBank.contains(bank)){
+            selectedBank.remove(bank);
+        }else {
+            selectedBank.add(bank);
+        }
+        getUser(message).setBank(selectedBank);
     }
 
     public void changeAccuracy(Message message, CommandAccuracy accuracy) {
@@ -50,7 +58,13 @@ public class UserService {
     }
 
     public void changeCurrency(Message message, CommandCurrency currency) {
-        getUser(message).setCurrency(currency);
+        List<CommandsWithMark> selectedCurrency = getUser(message).getCurrency();
+        if (selectedCurrency.contains(currency)){
+            selectedCurrency.remove(currency);
+        }else {
+            selectedCurrency.add(currency);
+        }
+        getUser(message).setCurrency(selectedCurrency);
     }
 
      public String getFileContent () {

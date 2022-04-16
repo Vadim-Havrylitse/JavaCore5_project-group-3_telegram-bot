@@ -34,8 +34,7 @@ public enum CommandAccuracy implements CommandsWithMark {
         answerMessage.setChatId(callbackQuery.getMessage().getChatId().toString());
         answerMessage.setMessageId(callbackQuery.getMessage().getMessageId());
         answerMessage.setReplyMarkup(
-                Keyboard.createKeyboardWithMark(
-                        userService.getUser(callbackQuery.getMessage()).getAccuracy(), CommandAccuracy.values()));
+                Keyboard.createKeyboardWithMark(userService.getUser(callbackQuery.getMessage()).getAccuracy(), CommandAccuracy.values()));
 
         return answerMessage;
     }

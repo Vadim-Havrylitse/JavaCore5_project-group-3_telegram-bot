@@ -29,8 +29,7 @@ public enum CommandCurrency implements CommandsWithMark {
         answerMessage.setChatId(callbackQuery.getMessage().getChatId().toString());
         answerMessage.setMessageId(callbackQuery.getMessage().getMessageId());
         answerMessage.setReplyMarkup(
-                Keyboard.createKeyboardWithMark(
-                        userService.getUser(callbackQuery.getMessage()).getCurrency(), CommandCurrency.values()));
+                Keyboard.createKeyboardWithMark(userService.getUser(callbackQuery.getMessage()).getCurrency(), CommandCurrency.values()));
 
         return answerMessage;
     }
