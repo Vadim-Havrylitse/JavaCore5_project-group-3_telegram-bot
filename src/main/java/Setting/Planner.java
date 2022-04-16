@@ -19,7 +19,7 @@ public class Planner {
         Calendar calendar = new GregorianCalendar();
 
         for (User user :
-                UserService.getUserService().getUserList()) {
+                UserService.getUserService().getAllUsers()) {
             if (user.getNotificationTime() != CommandNotification.NOTIFICATION_OFF) {
                 calendar.set(Calendar.HOUR_OF_DAY, Byte.parseByte(user.getNotificationTime().getCallbackData().substring(0,2)));
                 calendar.set(Calendar.MINUTE, 0);
