@@ -1,15 +1,18 @@
-package keyboard.comandsWithMark;
+package keyboard.comands;
 
-import Setting.UserService;
+import keyboard.Commands;
+import user.UserService;
 import keyboard.Keyboard;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.SneakyThrows;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+import telegramService.TelegramApi;
 
 @AllArgsConstructor
 @Getter
-public enum CommandCurrency implements CommandsWithMark {
+public enum CommandCurrency implements Commands {
     USD("USD",
             "USD"),
     EUR("EUR",
@@ -20,8 +23,9 @@ public enum CommandCurrency implements CommandsWithMark {
     private final String title;
     private final String callbackData;
 
+    @SneakyThrows
     @Override
-    public EditMessageReplyMarkup pressButton(CallbackQuery callbackQuery, UserService userService) {
+    public void pressButton(TelegramApi bot, CallbackQuery callbackQuery, UserService userService) {
         EditMessageReplyMarkup answerMessage = new EditMessageReplyMarkup();
 
         userService.changeCurrency(callbackQuery.getMessage(), this);
@@ -31,6 +35,6 @@ public enum CommandCurrency implements CommandsWithMark {
         answerMessage.setReplyMarkup(
                 Keyboard.createKeyboardWithMark(userService.getUser(callbackQuery.getMessage()).getCurrency(), CommandCurrency.values()));
 
-        return answerMessage;
+        bot.execute(answerMessage);
     }
 }

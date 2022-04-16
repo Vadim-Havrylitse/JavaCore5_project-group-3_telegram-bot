@@ -1,17 +1,19 @@
-package keyboard.comandsWithMark;
+package keyboard.comands;
 
-import Setting.UserService;
+import keyboard.Commands;
+import user.UserService;
 import keyboard.Keyboard;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.telegram.telegrambots.meta.api.methods.ParseMode;
+import lombok.SneakyThrows;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
+import telegramService.TelegramApi;
 
 @AllArgsConstructor
 @Getter
-public enum CommandNotification implements CommandsWithMark {
+public enum CommandNotification implements Commands {
 
     // callbackData must be parseByte()
     NINE("09:00", "09:00"),
@@ -29,8 +31,9 @@ public enum CommandNotification implements CommandsWithMark {
     private final String title;
     private final String callbackData;
 
+    @SneakyThrows
     @Override
-    public EditMessageReplyMarkup pressButton(CallbackQuery callbackQuery, UserService userService) {
+    public void pressButton(TelegramApi bot, CallbackQuery callbackQuery, UserService userService) {
 
         Message message = callbackQuery.getMessage();
 
@@ -50,6 +53,6 @@ public enum CommandNotification implements CommandsWithMark {
         answerMessage.setChatId(message.getChatId().toString());
         answerMessage.setReplyMarkup(Keyboard.createKeyboardForTimeAlert(message, userService, CommandNotification.values()));
 
-        return answerMessage;
+        bot.execute(answerMessage);
     }
 }

@@ -1,16 +1,19 @@
-package keyboard.comandsWithMark;
+package keyboard.comands;
 
-import Setting.UserService;
+import keyboard.Commands;
+import user.UserService;
 import keyboard.Keyboard;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.SneakyThrows;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
+import telegramService.TelegramApi;
 
 @Getter
 @AllArgsConstructor
-public enum CommandBank implements CommandsWithMark {
+public enum CommandBank implements Commands {
     PRIVAT("PrivatBank",
             "PrivatBank"),
     MONO("Monobank",
@@ -21,8 +24,9 @@ public enum CommandBank implements CommandsWithMark {
     private final String title;
     private final String callbackData;
 
+    @SneakyThrows
     @Override
-    public EditMessageReplyMarkup pressButton(CallbackQuery callbackQuery, UserService userService) {
+    public void pressButton(TelegramApi bot, CallbackQuery callbackQuery, UserService userService) {
         EditMessageReplyMarkup answerMessage = new EditMessageReplyMarkup();
         Message message = callbackQuery.getMessage();
         userService.changeBank(message, this);
@@ -33,6 +37,6 @@ public enum CommandBank implements CommandsWithMark {
                 Keyboard.createKeyboardWithMark(
                         userService.getUser(callbackQuery.getMessage()).getBank(), CommandBank.values()));
 
-        return answerMessage;
+       bot.execute(answerMessage);
     }
 }

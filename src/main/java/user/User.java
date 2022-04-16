@@ -1,6 +1,7 @@
 package user;
 
-import keyboard.comandsWithMark.*;
+import keyboard.Commands;
+import keyboard.comands.*;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -9,9 +10,9 @@ import java.util.List;
 @Data
 public class User {
     private final Long chatId;
-    private List<CommandsWithMark> bank;
+    private List<Commands> bank;
     private CommandAccuracy accuracy;
-    private List<CommandsWithMark> currency;
+    private List<Commands> currency;
     private CommandNotification notificationTime;
 
     {
