@@ -20,17 +20,17 @@ public class PrivatApiServiceTest {
     public void getBankCurrency(){
        List<PrivatBankResponse> privatBankResponseList = privatApiService.getBankCurrency();
         assertFalse(privatBankResponseList.isEmpty());
-        assertEquals("UAH", privatBankResponseList.get(0).getBase_ccy());
+        assertEquals("UAH", privatBankResponseList.get(0).getExchangeRate().get(0).getBaseCurrency());
         privatBankResponseList.forEach(System.out::println);
     }
     
     @Test
     public void getCurrentCurrency(){
-        CashCurrency cashCurrency = privatApiService.getCurrentCurrency(Currency.EUR);
+        CashCurrency cashCurrency = privatApiService.getCurrentCurrency(Currency.GBP);
         assertNotNull(cashCurrency);
         assertNotEquals(0.0, cashCurrency.getValueBuy());
         assertNotEquals(0.0, cashCurrency.getValueSale());
-        assertEquals(Currency.EUR, cashCurrency.getCurrency());
+        assertEquals(Currency.GBP, cashCurrency.getCurrency());
         assertEquals(BankName.PRIVAT, cashCurrency.getBankName());
         assertEquals(LocalDate.now(), cashCurrency.getDate());
         System.out.println("cashCurrency = " + cashCurrency);
