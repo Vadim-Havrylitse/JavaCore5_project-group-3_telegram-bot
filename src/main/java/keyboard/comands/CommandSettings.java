@@ -16,16 +16,16 @@ import telegramService.TelegramApi;
 @AllArgsConstructor
 public enum CommandSettings implements Commands {
     ACCURACY("Кол-во знаков после зяпятой",
-            "NumberOfSymbols",
+            "/accuracy",
             "Выберите желаемое количество:"),
     BANK("Банк",
-            "Bank",
+            "/bank",
             "Выберите желаемый банк:"),
     CURRENCY("Валюта",
-            "Currency",
+            "/currency",
             "Выберите желаемую валюту:"),
     NOTIFICATION("Время оповещения",
-            "Notification",
+            "/notification",
             "Выберите время оповещения:");
 
     private final String title;

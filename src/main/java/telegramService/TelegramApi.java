@@ -1,6 +1,7 @@
 package telegramService;
 
 import keyboard.Commands;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import user.UserService;
 import user.UserServiceImpl;
 import keyboard.Keyboard;
@@ -46,14 +47,23 @@ public class TelegramApi extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
 
         if (update.hasMessage() && update.getMessage().hasText()) {
-            System.out.println(update.getMessage().getChatId() +" : "+update.getMessage().getText());
             SendMessage message = new SendMessage();
             if (!userService.isUserPresent(update.getMessage())){
                     userService.addUser(update.getMessage());
                 }
 
+            for (Commands el : commandsBase){
+                if (el.getCallbackData().equals(update.getMessage().getText())){
+                    CallbackQuery myCallbackQuery = new CallbackQuery();
+                    myCallbackQuery.setData(update.getMessage().getText());
+                    myCallbackQuery.setMessage(update.getMessage());
+                    el.pressButton(this,myCallbackQuery, userService);
+                    return;
+                }
+            }
+
             if (update.getMessage().getText().equals("/start")){
-                message.setText("Добро пожаловать! Этот бот предназначен для информирования Вас о курсе нужных валют от нужных вам банков");
+                message.setText("Добро пожаловать! Этот бот предназначен для информирования Вас о курсе нужных валют от нужных вам банков.");
             }else {
                 message.setText("Для работы со мной пользуйтесь клавиатурой под сообщениями.");
             }
@@ -67,7 +77,6 @@ public class TelegramApi extends TelegramLongPollingBot {
         }
 
         if (update.hasCallbackQuery()) {
-            //System.out.println(update.getMessage().getChatId() +" : "+update.getCallbackQuery().getData());
             String updateCallbackData = update.getCallbackQuery().getData();
 
             for (Commands el : commandsBase){

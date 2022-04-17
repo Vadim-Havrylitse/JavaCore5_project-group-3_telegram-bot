@@ -17,7 +17,7 @@ import telegramService.TelegramApi;
 public enum CommandMain implements Commands {
 
     GETINFO("Получить инфо",
-            "/getInfo",
+            "/getinfo",
             "Курс .........."),
     SETTINGS("Настройки",
             "/settings",
