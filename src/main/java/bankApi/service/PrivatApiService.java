@@ -1,26 +1,29 @@
 package bankApi.service;
 
-import bankApi.models.BankName;
-import bankApi.models.CashCurrency;
-import bankApi.models.Currency;
-import bankApi.models.PrivatBankResponse;
+import bankApi.models.*;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class PrivatApiService implements BaseBankApiInterface<PrivatBankResponse> {
 
-    private final static String PRIVATE_URL = "https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5";
+    private final static String PRIVATE_URL_FORMAT = "https://api.privatbank.ua/p24api/exchange_rates?json&date=%s";
 
     @Override
     public List<PrivatBankResponse> getBankCurrency() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        String currentDate = formatter.format(LocalDate.now());
+        String privatUrl = String.format(PRIVATE_URL_FORMAT, currentDate);
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(PRIVATE_URL))
+                .uri(URI.create(privatUrl))
                 .header("Content-Type", "application/json; charset=UTF-8")
                 .GET()
                 .build();
@@ -28,7 +31,7 @@ public class PrivatApiService implements BaseBankApiInterface<PrivatBankResponse
         try {
             HttpResponse<String> httpResponse = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             if(httpResponse.statusCode() == 200 && !httpResponse.body().isEmpty()) {
-                response = gsonMapper.mapJsonToListPrivatBankResponse(httpResponse.body());
+                response = Collections.singletonList(gsonMapper.mapJsonToListPrivatBankResponse(httpResponse.body()));
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
@@ -52,13 +55,19 @@ public class PrivatApiService implements BaseBankApiInterface<PrivatBankResponse
        }
 
        private void setCurrencyToCash(PrivatBankResponse bankResponse){
-        CashCurrency cashCurrency = new CashCurrency();
-        cashCurrency.setCurrency(Currency.valueOf(bankResponse.getCcy()));
-        cashCurrency.setDate(LocalDate.now());
-        cashCurrency.setBankName(BankName.PRIVAT);
-        cashCurrency.setValueBuy(Double.valueOf(bankResponse.getBuy()));
-        cashCurrency.setValueSale(Double.valueOf(bankResponse.getSale()));
-        CashService.getCashCurrencyMap().put(getKey(cashCurrency.getCurrency()), cashCurrency);
+
+        List<ExchangeRate> exchangeRates = bankResponse.getExchangeRate();
+        exchangeRates.forEach(exchangeRate -> {
+            if (Currency.currencyExists(exchangeRate.getCurrency())){
+                CashCurrency cashCurrency = new CashCurrency();
+                cashCurrency.setCurrency(Currency.valueOf(exchangeRate.getCurrency()));
+                cashCurrency.setDate(LocalDate.now());
+                cashCurrency.setBankName(BankName.PRIVAT);
+                cashCurrency.setValueBuy(exchangeRate.getPurchaseRate());
+                cashCurrency.setValueSale(exchangeRate.getSaleRate());
+                CashService.getCashCurrencyMap().put(getKey(cashCurrency.getCurrency()), cashCurrency);
+            }
+        });
        }
 
        private String getKey(Currency currency){
