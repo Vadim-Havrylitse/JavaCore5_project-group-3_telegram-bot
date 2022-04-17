@@ -7,19 +7,6 @@ version '1.0-SNAPSHOT'
 repositories {
     mavenCentral()
 }
-sourceSets{
-    main {
-        java{
-            srcDir 'src/main/java'
-        }
-    }
-
-    test {
-        java{
-            srcDir 'src/test/java'
-        }
-    }
-}
 
 dependencies {
     implementation group: 'org.telegram', name: 'telegrambots', version: '5.7.1'
@@ -32,6 +19,18 @@ dependencies {
 
 }
 
+compileJava.options.encoding = 'UTF-8'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
 test {
     useJUnitPlatform()
+}
+
+compileJava.options.encoding = 'UTF-8'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
 }
