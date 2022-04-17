@@ -1,15 +1,18 @@
-package keyboard.comandsWithMark;
+package keyboard.comands;
 
-import Setting.UserService;
+import keyboard.Commands;
+import user.UserService;
 import keyboard.Keyboard;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.SneakyThrows;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+import telegramService.TelegramApi;
 
 @AllArgsConstructor
 @Getter
-public enum CommandAccuracy implements CommandsWithMark {
+public enum CommandAccuracy implements Commands {
 
     TWO("2",
             "2",
@@ -25,8 +28,9 @@ public enum CommandAccuracy implements CommandsWithMark {
     private final String callbackData;
     private final String messageAfterPressButton;
 
+    @SneakyThrows
     @Override
-    public EditMessageReplyMarkup pressButton(CallbackQuery callbackQuery, UserService userService) {
+    public void pressButton(TelegramApi bot, CallbackQuery callbackQuery, UserService userService) {
         EditMessageReplyMarkup answerMessage = new EditMessageReplyMarkup();
 
         userService.changeAccuracy(callbackQuery.getMessage(), this);
@@ -36,6 +40,6 @@ public enum CommandAccuracy implements CommandsWithMark {
         answerMessage.setReplyMarkup(
                 Keyboard.createKeyboardWithMark(userService.getUser(callbackQuery.getMessage()).getAccuracy(), CommandAccuracy.values()));
 
-        return answerMessage;
+        bot.execute(answerMessage);
     }
 }
