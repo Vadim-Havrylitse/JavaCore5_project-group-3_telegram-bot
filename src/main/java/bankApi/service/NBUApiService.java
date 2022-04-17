@@ -60,7 +60,7 @@ public class NBUApiService implements BaseBankApiInterface<NBUResponseItemDTO> {
             cashCurrency.setCurrency(Currency.valueOf(bankResponse.getCc()));
             cashCurrency.setDate(LocalDate.now());
             cashCurrency.setBankName(BankName.NBU);
-            cashCurrency.setValueBuy(Double.valueOf(bankResponse.getRate()));
+            cashCurrency.setValueBuy(bankResponse.getRate());
 
             CashService.getCashCurrencyMap().put(getKey(cashCurrency.getCurrency()), cashCurrency);
         }

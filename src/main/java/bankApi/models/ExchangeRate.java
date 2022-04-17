@@ -5,7 +5,7 @@ import lombok.ToString;
 
 @Data
 @ToString
-public class ExchangeRate implements BaseBankResponse {
+public class ExchangeRate implements BaseBankResponseInterface {
     private String baseCurrency;
     private String currency;
     private Double saleRateNB;
