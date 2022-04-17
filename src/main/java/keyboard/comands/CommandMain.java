@@ -27,6 +27,7 @@ public enum CommandMain implements Commands {
     private final String callbackData;
     private final String messageAfterPressButton;
 
+    @SneakyThrows
     @Override
     public void pressButton(TelegramApi bot, CallbackQuery callbackQuery, UserService userService) {
         SendMessage answerMessage = new SendMessage();
@@ -43,11 +44,7 @@ public enum CommandMain implements Commands {
         answerMessage.setReplyMarkup(keyboardMarkup);
         answerMessage.setText(this.messageAfterPressButton);
 
-        try {
-            bot.execute(answerMessage);
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
+        bot.execute(answerMessage);
     }
 
 }

@@ -1,5 +1,6 @@
 package keyboard.comands;
 
+import Setting.Planner;
 import keyboard.Commands;
 import user.UserService;
 import keyboard.Keyboard;
@@ -39,10 +40,12 @@ public enum CommandNotification implements Commands {
 
         if (callbackQuery.getData().equals(NOTIFICATION_OFF.callbackData)){
             userService.changeSchedule(message, NOTIFICATION_OFF);
+            Planner.schedulerStop(callbackQuery.getMessage().getChatId());
         }else {
             for (CommandNotification time : CommandNotification.values()) {
-                if (callbackQuery.getData().equals(time.title)) {
+                if (callbackQuery.getData().equals(time.callbackData)) {
                     userService.changeSchedule(message, time);
+                    Planner.schedulerReload(bot, callbackQuery, userService);
                     break;
                 }
             }
