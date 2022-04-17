@@ -1,6 +1,6 @@
 package utils.mapper;
 
-import bank_api.models.MononankResponse;
+import bank_api.models.MonobankResponse;
 import bank_api.models.NBUResponseItemDTO;
 import bank_api.models.PrivatBankResponse;
 import com.google.gson.Gson;
@@ -23,8 +23,8 @@ public class GsonMapper {
         return gson.fromJson(json, typeToken);
     }
 
-    public List<MononankResponse> mapJsonToListMonobankResponse(String json){
-        Type userList = new TypeToken<ArrayList<MononankResponse>>(){}.getType();
+    public List<MonobankResponse> mapJsonToListMonobankResponse(String json){
+        Type userList = new TypeToken<ArrayList<MonobankResponse>>(){}.getType();
 
         return gson.fromJson(json,userList);
     }

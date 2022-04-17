@@ -3,7 +3,7 @@ package bank_api.models;
 import lombok.Data;
 
 @Data
-public class MononankResponse {
+public class MonobankResponse {
     private Integer currencyCodeA;
     private Integer currencyCodeB;
     private Long date;

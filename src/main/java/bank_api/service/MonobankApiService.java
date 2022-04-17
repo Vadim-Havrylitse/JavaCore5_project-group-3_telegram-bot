@@ -13,19 +13,19 @@ import java.util.Optional;
 import bank_api.models.BankName;
 import bank_api.models.CashCurrency;
 import bank_api.models.Currency;
-import bank_api.models.MononankResponse;
+import bank_api.models.MonobankResponse;
 
-public class MonobankApiService implements BaseBankApiInterface<MononankResponse> {
+public class MonobankApiService implements BaseBankApiInterface<MonobankResponse> {
     private static final String MONO_URL = "https://api.monobank.ua/bank/currency";
 
     @Override
-    public List<MononankResponse> getBankCurrency() {
+    public List<MonobankResponse> getBankCurrency() {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(MONO_URL))
                 .header("Content-Type", "application/json; charset=UTF-8")
                 .GET()
                 .build();
-        List<MononankResponse> response = new ArrayList<>();
+        List<MonobankResponse> response = new ArrayList<>();
 
         try {
             HttpResponse<String> httpResponse = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
@@ -49,12 +49,12 @@ public class MonobankApiService implements BaseBankApiInterface<MononankResponse
                 return lastCashCurrency;
             }
         }
-        List<MononankResponse> bankResponse = getBankCurrency();
+        List<MonobankResponse> bankResponse = getBankCurrency();
         bankResponse.forEach(this::setCurrencyToCash);
         return CashService.getCashCurrencyMap().get(key);
     }
 
-    private void setCurrencyToCash(MononankResponse bankResponse) {
+    private void setCurrencyToCash(MonobankResponse bankResponse) {
         // нужно проверять есть ли получаемая валюта от банка среди енама наших валют
         String bankResponseCodeA = bankResponse.getCurrencyCodeA().toString();
         Optional<Currency> currency = Arrays.stream(Currency.values()).filter(x -> x.codeISOL.equals(bankResponseCodeA)).findFirst();
