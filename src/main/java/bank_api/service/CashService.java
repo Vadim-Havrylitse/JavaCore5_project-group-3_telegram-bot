@@ -1,6 +1,6 @@
-package bankApi.service;
+package bank_api.service;
 
-import bankApi.models.CashCurrency;
+import bank_api.models.CashCurrency;
 
 import java.util.HashMap;
 import java.util.Map;

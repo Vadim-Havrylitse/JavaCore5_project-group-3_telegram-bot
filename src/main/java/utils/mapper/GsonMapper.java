@@ -1,8 +1,8 @@
 package utils.mapper;
 
-import bankApi.models.MononankResponse;
-import bankApi.models.NBUResponseItemDTO;
-import bankApi.models.PrivatBankResponse;
+import bank_api.models.MononankResponse;
+import bank_api.models.NBUResponseItemDTO;
+import bank_api.models.PrivatBankResponse;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 

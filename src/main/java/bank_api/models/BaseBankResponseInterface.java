@@ -1,4 +1,4 @@
-package bankApi.models;
+package bank_api.models;
 
 public interface BaseBankResponseInterface {
 }

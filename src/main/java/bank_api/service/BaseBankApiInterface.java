@@ -1,7 +1,7 @@
-package bankApi.service;
+package bank_api.service;
 
-import bankApi.models.CashCurrency;
-import bankApi.models.Currency;
+import bank_api.models.CashCurrency;
+import bank_api.models.Currency;
 import utils.mapper.GsonMapper;
 
 import java.net.http.HttpClient;

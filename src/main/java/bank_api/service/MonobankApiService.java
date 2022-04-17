@@ -1,6 +1,5 @@
-package bankApi.service;
+package bank_api.service;
 
-import bankApi.models.*;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpRequest;
@@ -10,8 +9,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Predicate;
 
+import bank_api.models.BankName;
+import bank_api.models.CashCurrency;
+import bank_api.models.Currency;
+import bank_api.models.MononankResponse;
 
 public class MonobankApiService implements BaseBankApiInterface<MononankResponse> {
     private static final String MONO_URL = "https://api.monobank.ua/bank/currency";
@@ -24,8 +26,10 @@ public class MonobankApiService implements BaseBankApiInterface<MononankResponse
                 .GET()
                 .build();
         List<MononankResponse> response = new ArrayList<>();
+
         try {
             HttpResponse<String> httpResponse = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
             if (httpResponse.statusCode() == 200 && !httpResponse.body().isEmpty()) {
                 response = gsonMapper.mapJsonToListMonobankResponse(httpResponse.body());
             }
@@ -61,15 +65,11 @@ public class MonobankApiService implements BaseBankApiInterface<MononankResponse
             cashCurrency.setDate(LocalDate.now());
             cashCurrency.setBankName(BankName.MONO);
             // нужно предусмотреть что у банка нужные нам валюты могут быть, но продажа/покупка заморожена и приходит значение null
-            cashCurrency.setValueBuy(bankResponse.getRateBuy() != null ? bankResponse.getRateBuy(): Double.valueOf(0));
-            cashCurrency.setValueSale(bankResponse.getRateSell() != null ? bankResponse.getRateSell(): Double.valueOf(0));
+            cashCurrency.setValueBuy(bankResponse.getRateBuy() != null ? bankResponse.getRateBuy() : Double.valueOf(0));
+            cashCurrency.setValueSale(bankResponse.getRateSell() != null ? bankResponse.getRateSell() : Double.valueOf(0));
             CashService.getCashCurrencyMap().put(getKey(cashCurrency.getCurrency()), cashCurrency);
         }
     }
-//    USD("840"),
-//    EUR("978"),
-//    GBP("826");
-
 
     private String getKey(Currency currency) {
         return BankName.MONO.name() + currency.codeISOL;

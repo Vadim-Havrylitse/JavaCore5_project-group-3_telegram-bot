@@ -1,11 +1,9 @@
-package bankApi.models;
+package bank_api.models;
 
 import java.util.List;
 
 import lombok.Data;
 import lombok.ToString;
-
-import java.util.List;
 
 @ToString
 @Data

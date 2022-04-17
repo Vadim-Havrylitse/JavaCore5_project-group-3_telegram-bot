@@ -1,6 +1,6 @@
-package bankApi.service;
+package bank_api.service;
 
-import bankApi.models.*;
+import bank_api.models.*;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -16,6 +16,7 @@ public class MonobankApiServiceTest {
     @Test
     public void getBankCurrency(){
         List<MononankResponse> monobankBankResponseList = monobankApiService.getBankCurrency();
+        System.out.println("monobankBankResponseList = " + monobankBankResponseList);
         assertFalse(monobankBankResponseList.isEmpty());
         assertEquals(840, monobankBankResponseList.get(0).getCurrencyCodeA());
         monobankBankResponseList.forEach(System.out::println);

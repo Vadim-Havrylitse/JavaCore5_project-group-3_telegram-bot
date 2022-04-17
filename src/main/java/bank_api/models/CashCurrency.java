@@ -1,4 +1,4 @@
-package bankApi.models;
+package bank_api.models;
 
 import lombok.Data;
 

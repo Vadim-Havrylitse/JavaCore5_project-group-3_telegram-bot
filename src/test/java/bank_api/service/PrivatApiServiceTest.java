@@ -1,10 +1,10 @@
-package bankApi.service;
+package bank_api.service;
 
 
-import bankApi.models.BankName;
-import bankApi.models.CashCurrency;
-import bankApi.models.Currency;
-import bankApi.models.PrivatBankResponse;
+import bank_api.models.BankName;
+import bank_api.models.CashCurrency;
+import bank_api.models.Currency;
+import bank_api.models.PrivatBankResponse;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;

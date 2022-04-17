@@ -1,8 +1,8 @@
-package bankApi.service;
+package bank_api.service;
 
-import bankApi.models.CashCurrency;
-import bankApi.models.Currency;
-import bankApi.models.NBUResponseItemDTO;
+import bank_api.models.CashCurrency;
+import bank_api.models.Currency;
+import bank_api.models.NBUResponseItemDTO;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

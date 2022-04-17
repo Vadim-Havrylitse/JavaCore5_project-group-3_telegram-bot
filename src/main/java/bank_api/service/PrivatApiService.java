@@ -1,6 +1,6 @@
-package bankApi.service;
+package bank_api.service;
 
-import bankApi.models.*;
+import bank_api.models.*;
 
 import java.io.IOException;
 import java.net.URI;
@@ -9,7 +9,6 @@ import java.net.http.HttpResponse;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
