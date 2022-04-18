@@ -6,7 +6,7 @@ import java.util.List;
 
 import bank_api.models.CashCurrency;
 import bank_api.models.NBUResponseItemDTO;
-import keyboard.comandsWithMark.CommandCurrency;
+import keyboard.comands.CommandCurrency;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;

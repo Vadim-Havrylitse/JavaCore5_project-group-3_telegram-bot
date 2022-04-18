@@ -1,14 +1,17 @@
 package keyboard.comands;
 
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+
+import java.util.Arrays;
+
 import keyboard.Commands;
-import user.UserService;
 import keyboard.Keyboard;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.SneakyThrows;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
-import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import telegramService.TelegramApi;
+import user.UserService;
 
 @AllArgsConstructor
 @Getter
@@ -28,10 +31,9 @@ public enum CommandCurrency implements Commands {
         if (currency == null) {
             return false;
         }
-        return switch (currency) {
-            case "USD", "EUR", "GBP" -> true;
-            default -> false;
-        };
+
+        return Arrays.stream(values())
+                .anyMatch(v -> v.getTitle().equals(currency));
     }
 
     @SneakyThrows

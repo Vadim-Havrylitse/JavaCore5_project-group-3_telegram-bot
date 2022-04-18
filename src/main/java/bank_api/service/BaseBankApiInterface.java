@@ -4,7 +4,7 @@ import java.net.http.HttpClient;
 import java.util.List;
 
 import bank_api.models.CashCurrency;
-import keyboard.comandsWithMark.CommandCurrency;
+import keyboard.comands.CommandCurrency;
 import utils.mapper.GsonMapper;
 
 public interface BaseBankApiInterface<T> {

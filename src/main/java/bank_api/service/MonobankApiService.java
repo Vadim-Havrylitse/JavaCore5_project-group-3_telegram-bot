@@ -12,8 +12,8 @@ import java.util.Optional;
 
 import bank_api.models.CashCurrency;
 import bank_api.models.MonobankResponse;
-import keyboard.comandsWithMark.CommandBank;
-import keyboard.comandsWithMark.CommandCurrency;
+import keyboard.comands.CommandBank;
+import keyboard.comands.CommandCurrency;
 
 public class MonobankApiService implements BaseBankApiInterface<MonobankResponse> {
     private static final String MONO_URL = "https://api.monobank.ua/bank/currency";

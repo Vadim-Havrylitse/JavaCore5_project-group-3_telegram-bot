@@ -13,8 +13,8 @@ import java.util.List;
 import bank_api.models.CashCurrency;
 import bank_api.models.ExchangeRate;
 import bank_api.models.PrivatBankResponse;
-import keyboard.comandsWithMark.CommandBank;
-import keyboard.comandsWithMark.CommandCurrency;
+import keyboard.comands.CommandBank;
+import keyboard.comands.CommandCurrency;
 
 public class PrivatApiService implements BaseBankApiInterface<PrivatBankResponse> {
 

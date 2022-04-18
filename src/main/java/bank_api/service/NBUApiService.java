@@ -12,8 +12,8 @@ import java.util.function.Predicate;
 
 import bank_api.models.CashCurrency;
 import bank_api.models.NBUResponseItemDTO;
-import keyboard.comandsWithMark.CommandBank;
-import keyboard.comandsWithMark.CommandCurrency;
+import keyboard.comands.CommandBank;
+import keyboard.comands.CommandCurrency;
 
 public class NBUApiService implements BaseBankApiInterface<NBUResponseItemDTO> {
     private static final String API_URL = "https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json";

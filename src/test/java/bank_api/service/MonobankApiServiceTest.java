@@ -7,8 +7,8 @@ import java.util.List;
 
 import bank_api.models.CashCurrency;
 import bank_api.models.MonobankResponse;
-import keyboard.comandsWithMark.CommandBank;
-import keyboard.comandsWithMark.CommandCurrency;
+import keyboard.comands.CommandBank;
+import keyboard.comands.CommandCurrency;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;

@@ -2,8 +2,8 @@ package bank_api.models;
 
 import java.time.LocalDate;
 
-import keyboard.comandsWithMark.CommandBank;
-import keyboard.comandsWithMark.CommandCurrency;
+import keyboard.comands.CommandBank;
+import keyboard.comands.CommandCurrency;
 import lombok.Data;
 
 @Data
