@@ -29,7 +29,7 @@ public enum CommandMain implements Commands {
 
     private final String title;
     private final String callbackData;
-    private String messageAfterPressButton;
+    private final String messageAfterPressButton;
 
     @SneakyThrows
     @Override
@@ -39,18 +39,16 @@ public enum CommandMain implements Commands {
         switch (this){
             case GETINFO:
                 keyboardMarkup = Keyboard.createKeyboardInOneColumn(CommandMain.values());
-
                 answerMessage.setParseMode(ParseMode.HTML);
-                messageAfterPressButton = buildGetInfoMessage(new User(callbackQuery.getMessage().getChatId()));
+                answerMessage.setText(buildGetInfoMessage(new User(callbackQuery.getMessage().getChatId())));
                 break;
             case SETTINGS:
                 keyboardMarkup = Keyboard.createKeyboardInOneColumn(CommandSettings.values());
+                answerMessage.setText(this.messageAfterPressButton);
                 break;
         }
         answerMessage.setChatId(callbackQuery.getMessage().getChatId().toString());
         answerMessage.setReplyMarkup(keyboardMarkup);
-        answerMessage.setText(this.messageAfterPressButton);
-
         bot.execute(answerMessage);
     }
 
