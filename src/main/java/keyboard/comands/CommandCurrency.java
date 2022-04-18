@@ -1,27 +1,40 @@
 package keyboard.comands;
 
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+
+import java.util.Arrays;
+
 import keyboard.Commands;
-import user.UserService;
 import keyboard.Keyboard;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.SneakyThrows;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
-import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import telegramService.TelegramApi;
+import user.UserService;
 
 @AllArgsConstructor
 @Getter
 public enum CommandCurrency implements Commands {
     USD("USD",
-            "USD"),
+            "USD", "840"),
     EUR("EUR",
-            "EUR"),
-    BTC("BTC",
-            "BTC");
+            "EUR", "978"),
+    GBP("GBP",
+            "GBP", "826");
 
     private final String title;
     private final String callbackData;
+    private final String codeISOL;
+
+    public static boolean currencyExists(String currency) {
+        if (currency == null) {
+            return false;
+        }
+
+        return Arrays.stream(values())
+                .anyMatch(v -> v.getTitle().equals(currency));
+    }
 
     @SneakyThrows
     @Override
