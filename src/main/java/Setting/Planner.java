@@ -1,47 +1,50 @@
 package Setting;
 
-import keyboard.comandsWithMark.CommandNotification;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import keyboard.comands.CommandMain;
+import keyboard.comands.CommandNotification;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import telegramService.TelegramApi;
-import user.User;
+import user.UserService;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.Map;
+import java.util.concurrent.*;
 
 public class Planner {
-    private final ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(10);
 
-    public void schedulerStart(TelegramApi telegramApi) {
+    private static final Map<Long, ScheduledExecutorService> schedulerPool = new ConcurrentHashMap<>();
+
+    public static void schedulerReload(TelegramApi bot, CallbackQuery callbackQuery, UserService userService) {
+        long chatId = callbackQuery.getMessage().getChatId();
+
+        if (schedulerPool.containsKey(chatId)){
+            System.out.println("next stop from schedulerReload");
+            schedulerStop(chatId);
+        }
 
         Calendar calendar = new GregorianCalendar();
-
-        for (User user :
-                UserService.getUserService().getAllUsers()) {
-            if (user.getNotificationTime() != CommandNotification.NOTIFICATION_OFF) {
-                calendar.set(Calendar.HOUR_OF_DAY, Byte.parseByte(user.getNotificationTime().getCallbackData().substring(0,2)));
-                calendar.set(Calendar.MINUTE, 0);
-                calendar.set(Calendar.SECOND, 0);
-                Date date = calendar.getTime();
-                long delay = date.getTime() - System.currentTimeMillis();
-                if (delay < 0) {
-                    delay = delay + 24 * 60 * 60 * 1000;
-                }
-
-                Runnable runnable = () -> {
-                    try {
-                        telegramApi.execute(SendMessage.builder()
-                                .chatId(user.getChatId().toString())
-                                .build());
-                    } catch (TelegramApiException e) {
-                        e.printStackTrace();
-                    }
-                };
-                executor.scheduleAtFixedRate(runnable, delay, 24 * 60 * 60 * 1000, TimeUnit.MILLISECONDS);
-            }
+        calendar.set(Calendar.HOUR_OF_DAY, Byte.parseByte(callbackQuery.getData().substring(0,2)));
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        Date date = calendar.getTime();
+        long delay = date.getTime() - System.currentTimeMillis();
+        if (delay < 0) {
+            delay = delay + 24 * 60 * 60 * 1000;
         }
+
+        Runnable runnable = () -> CommandMain.GETINFO.pressButton(bot, callbackQuery, userService);
+
+        ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+        executor.scheduleAtFixedRate(runnable, delay, 24 * 60 * 60 * 1000, TimeUnit.MILLISECONDS);
+        schedulerPool.put(chatId,executor);
+    }
+
+    public static void schedulerStop(long chatId){
+        System.out.println("stop scheduler");
+        schedulerPool.get(chatId).shutdown();
+        schedulerPool.remove(chatId);
     }
 }
 
