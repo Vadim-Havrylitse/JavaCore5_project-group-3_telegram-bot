@@ -40,7 +40,7 @@ public enum CommandMain implements Commands {
             case GETINFO:
                 keyboardMarkup = Keyboard.createKeyboardInOneColumn(CommandMain.values());
                 answerMessage.setParseMode(ParseMode.HTML);
-                answerMessage.setText(buildGetInfoMessage(new User(callbackQuery.getMessage().getChatId())));
+                answerMessage.setText(buildGetInfoMessage(userService.getUser(callbackQuery.getMessage())));
                 break;
             case SETTINGS:
                 keyboardMarkup = Keyboard.createKeyboardInOneColumn(CommandSettings.values());
