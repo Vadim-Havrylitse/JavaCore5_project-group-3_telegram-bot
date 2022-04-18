@@ -1,13 +1,16 @@
 package bank_api.service;
 
-import bank_api.models.CashCurrency;
-import bank_api.models.Currency;
-import bank_api.models.NBUResponseItemDTO;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import bank_api.models.CashCurrency;
+import bank_api.models.NBUResponseItemDTO;
+import keyboard.comandsWithMark.CommandCurrency;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 class NBUApiServiceTest {
     NBUApiService nbuApiService = new NBUApiService();
@@ -24,9 +27,9 @@ class NBUApiServiceTest {
 
     @Test
     void testGetCurrentCurrencyIsValid() {
-        CashCurrency usdCurrency = nbuApiService.getCurrentCurrency(Currency.USD);
+        CashCurrency usdCurrency = nbuApiService.getCurrentCurrency(CommandCurrency.USD);
 
-        assertEquals(Currency.USD, usdCurrency.getCurrency());
+        assertEquals(CommandCurrency.USD, usdCurrency.getCurrency());
         assertInstanceOf(Double.class, usdCurrency.getValueBuy());
     }
 }

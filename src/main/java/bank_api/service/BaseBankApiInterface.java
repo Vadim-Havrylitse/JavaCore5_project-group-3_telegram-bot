@@ -1,11 +1,11 @@
 package bank_api.service;
 
-import bank_api.models.CashCurrency;
-import bank_api.models.Currency;
-import utils.mapper.GsonMapper;
-
 import java.net.http.HttpClient;
 import java.util.List;
+
+import bank_api.models.CashCurrency;
+import keyboard.comandsWithMark.CommandCurrency;
+import utils.mapper.GsonMapper;
 
 public interface BaseBankApiInterface<T> {
 
@@ -15,5 +15,5 @@ public interface BaseBankApiInterface<T> {
 
     List<T> getBankCurrency();
 
-    CashCurrency getCurrentCurrency(Currency currency);
+    CashCurrency getCurrentCurrency(CommandCurrency currency);
 }

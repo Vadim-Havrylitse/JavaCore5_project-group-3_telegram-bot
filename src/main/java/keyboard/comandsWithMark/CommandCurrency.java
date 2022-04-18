@@ -11,14 +11,25 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 @Getter
 public enum CommandCurrency implements CommandsWithMark {
     USD("USD",
-            "USD"),
+            "USD", "840"),
     EUR("EUR",
-            "EUR"),
-    BTC("BTC",
-            "BTC");
+            "EUR", "978"),
+    GBP("GBP",
+            "GBP", "826");
 
     private final String title;
     private final String callbackData;
+    private final String codeISOL;
+
+    public static boolean currencyExists(String currency) {
+        if (currency == null) {
+            return false;
+        }
+        return switch (currency) {
+            case "USD", "EUR", "GBP" -> true;
+            default -> false;
+        };
+    }
 
     @Override
     public EditMessageReplyMarkup pressButton(CallbackQuery callbackQuery, UserService userService) {

@@ -1,7 +1,5 @@
 package bank_api.service;
 
-import bank_api.models.*;
-
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpRequest;
@@ -12,9 +10,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import bank_api.models.CashCurrency;
+import bank_api.models.ExchangeRate;
+import bank_api.models.PrivatBankResponse;
+import keyboard.comandsWithMark.CommandBank;
+import keyboard.comandsWithMark.CommandCurrency;
+
 public class PrivatApiService implements BaseBankApiInterface<PrivatBankResponse> {
 
-    private final static String PRIVATE_URL_FORMAT = "https://api.privatbank.ua/p24api/exchange_rates?json&date=%s";
+    private static final String PRIVATE_URL_FORMAT = "https://api.privatbank.ua/p24api/exchange_rates?json&date=%s";
 
     @Override
     public List<PrivatBankResponse> getBankCurrency() {
@@ -29,7 +33,7 @@ public class PrivatApiService implements BaseBankApiInterface<PrivatBankResponse
         List<PrivatBankResponse> response = new ArrayList<>();
         try {
             HttpResponse<String> httpResponse = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-            if(httpResponse.statusCode() == 200 && !httpResponse.body().isEmpty()) {
+            if (httpResponse.statusCode() == 200 && !httpResponse.body().isEmpty()) {
                 response = Collections.singletonList(gsonMapper.mapJsonToListPrivatBankResponse(httpResponse.body()));
             }
         } catch (IOException | InterruptedException e) {
@@ -40,36 +44,39 @@ public class PrivatApiService implements BaseBankApiInterface<PrivatBankResponse
     }
 
     @Override
-    public CashCurrency getCurrentCurrency(Currency currency) {
+    public CashCurrency getCurrentCurrency(CommandCurrency currency) {
         String key = getKey(currency);
+
         if (!CashService.getCashCurrencyMap().isEmpty() && CashService.getCashCurrencyMap().containsKey(key)) {
             CashCurrency lastCashCurrency = CashService.getCashCurrencyMap().get(key);
+
             if (lastCashCurrency != null && lastCashCurrency.getDate().equals(LocalDate.now())) {
                 return lastCashCurrency;
             }
         }
-            List<PrivatBankResponse> bankResponse = getBankCurrency();
-            bankResponse.forEach(this::setCurrencyToCash);
-            return CashService.getCashCurrencyMap().get(key);
-       }
+        List<PrivatBankResponse> bankResponse = getBankCurrency();
+        bankResponse.forEach(this::setCurrencyToCash);
 
-       private void setCurrencyToCash(PrivatBankResponse bankResponse){
+        return CashService.getCashCurrencyMap().get(key);
+    }
+
+    private void setCurrencyToCash(PrivatBankResponse bankResponse) {
 
         List<ExchangeRate> exchangeRates = bankResponse.getExchangeRate();
         exchangeRates.forEach(exchangeRate -> {
-            if (Currency.currencyExists(exchangeRate.getCurrency())){
+            if (CommandCurrency.currencyExists(exchangeRate.getCurrency())) {
                 CashCurrency cashCurrency = new CashCurrency();
-                cashCurrency.setCurrency(Currency.valueOf(exchangeRate.getCurrency()));
+                cashCurrency.setCurrency(CommandCurrency.valueOf(exchangeRate.getCurrency()));
                 cashCurrency.setDate(LocalDate.now());
-                cashCurrency.setBankName(BankName.PRIVAT);
+                cashCurrency.setBankName(CommandBank.PRIVAT);
                 cashCurrency.setValueBuy(exchangeRate.getPurchaseRate());
                 cashCurrency.setValueSale(exchangeRate.getSaleRate());
                 CashService.getCashCurrencyMap().put(getKey(cashCurrency.getCurrency()), cashCurrency);
             }
         });
-       }
+    }
 
-       private String getKey(Currency currency){
-        return BankName.PRIVAT.name() + currency;
-       }
+    private String getKey(CommandCurrency currency) {
+        return CommandBank.PRIVAT.name() + currency;
+    }
 }

@@ -1,14 +1,15 @@
 package bank_api.models;
 
-import lombok.Data;
-
 import java.time.LocalDate;
+
+import keyboard.comandsWithMark.CommandBank;
+import keyboard.comandsWithMark.CommandCurrency;
+import lombok.Data;
 
 @Data
 public class CashCurrency {
-
-    private Currency currency;
-    private BankName bankName;
+    private CommandCurrency currency;
+    private CommandBank bankName;
     private LocalDate date;
     private Double valueBuy;
     private Double valueSale;

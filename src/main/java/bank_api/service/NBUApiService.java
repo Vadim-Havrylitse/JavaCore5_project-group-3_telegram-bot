@@ -1,10 +1,5 @@
 package bank_api.service;
 
-import bank_api.models.BankName;
-import bank_api.models.CashCurrency;
-import bank_api.models.Currency;
-import bank_api.models.NBUResponseItemDTO;
-
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpRequest;
@@ -14,6 +9,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
+
+import bank_api.models.CashCurrency;
+import bank_api.models.NBUResponseItemDTO;
+import keyboard.comandsWithMark.CommandBank;
+import keyboard.comandsWithMark.CommandCurrency;
 
 public class NBUApiService implements BaseBankApiInterface<NBUResponseItemDTO> {
     private static final String API_URL = "https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json";
@@ -39,7 +39,7 @@ public class NBUApiService implements BaseBankApiInterface<NBUResponseItemDTO> {
     }
 
     @Override
-    public CashCurrency getCurrentCurrency(Currency currency) {
+    public CashCurrency getCurrentCurrency(CommandCurrency currency) {
         String key = getKey(currency);
 
         if (!CashService.getCashCurrencyMap().isEmpty() && CashService.getCashCurrencyMap().containsKey(key)) {
@@ -57,9 +57,9 @@ public class NBUApiService implements BaseBankApiInterface<NBUResponseItemDTO> {
     private void setCurrencyToCash(NBUResponseItemDTO bankResponse) {
         if (isAppIncludeCurrency(bankResponse.getCc())) {
             CashCurrency cashCurrency = new CashCurrency();
-            cashCurrency.setCurrency(Currency.valueOf(bankResponse.getCc()));
+            cashCurrency.setCurrency(CommandCurrency.valueOf(bankResponse.getCc()));
             cashCurrency.setDate(LocalDate.now());
-            cashCurrency.setBankName(BankName.NBU);
+            cashCurrency.setBankName(CommandBank.NBU);
             cashCurrency.setValueBuy(bankResponse.getRate());
 
             CashService.getCashCurrencyMap().put(getKey(cashCurrency.getCurrency()), cashCurrency);
@@ -67,13 +67,13 @@ public class NBUApiService implements BaseBankApiInterface<NBUResponseItemDTO> {
     }
 
     private boolean isAppIncludeCurrency(String responseCurrency) {
-        return Arrays.stream(Currency.values())
+        return Arrays.stream(CommandCurrency.values())
                 .map(Enum::name)
                 .anyMatch(Predicate.isEqual(responseCurrency));
     }
 
-    private String getKey(Currency currency) {
-        return BankName.PRIVAT.name() + currency;
+    private String getKey(CommandCurrency currency) {
+        return CommandBank.NBU.name() + currency;
     }
 
     private boolean isResponseValid(HttpResponse<String> response) {

@@ -1,20 +1,25 @@
 package bank_api.service;
 
-import bank_api.models.*;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import bank_api.models.CashCurrency;
+import bank_api.models.MonobankResponse;
+import keyboard.comandsWithMark.CommandBank;
+import keyboard.comandsWithMark.CommandCurrency;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class MonobankApiServiceTest {
+class MonobankApiServiceTest {
     MonobankApiService monobankApiService = new MonobankApiService();
 
-
     @Test
-    public void getBankCurrency(){
+    void getBankCurrency() {
         List<MonobankResponse> monobankBankResponseList = monobankApiService.getBankCurrency();
         System.out.println("monobankBankResponseList = " + monobankBankResponseList);
         assertFalse(monobankBankResponseList.isEmpty());
@@ -23,13 +28,13 @@ public class MonobankApiServiceTest {
     }
 
     @Test
-    public void getCurrentCurrency(){
-        CashCurrency cashCurrency = monobankApiService.getCurrentCurrency(Currency. EUR);
+    void getCurrentCurrency() {
+        CashCurrency cashCurrency = monobankApiService.getCurrentCurrency(CommandCurrency.EUR);
         assertNotNull(cashCurrency);
         assertNotEquals(0.0, cashCurrency.getValueBuy());
         assertNotEquals(0.0, cashCurrency.getValueSale());
-        assertEquals(Currency.EUR, cashCurrency.getCurrency());
-        assertEquals(BankName.MONO, cashCurrency.getBankName());
+        assertEquals(CommandCurrency.EUR, cashCurrency.getCurrency());
+        assertEquals(CommandBank.MONO, cashCurrency.getBankName());
         assertEquals(LocalDate.now(), cashCurrency.getDate());
         System.out.println("cashCurrency = " + cashCurrency);
     }
