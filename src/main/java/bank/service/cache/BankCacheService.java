@@ -1,19 +1,19 @@
-package bank_api.service;
+package bank.service.cache;
 
-import bank_api.models.CashCurrency;
+import bank.models.CurrencyInfoDTO;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class CashService {
+public class BankCacheService {
 
     //Key for Map is string value bankName+currency, for example: "PrivatBank"+"EUR", the key is PrivatBankEUR
-    private static Map<String, CashCurrency> cashCurrencyMap;
+    private static Map<String, CurrencyInfoDTO> cashCurrencyMap;
 
-    private CashService() {
+    private BankCacheService() {
     }
 
-    public static synchronized Map<String, CashCurrency> getCashCurrencyMap() {
+    public static synchronized Map<String, CurrencyInfoDTO> getCashCurrencyMap() {
 
         if (cashCurrencyMap == null) {
             cashCurrencyMap = new HashMap<>();

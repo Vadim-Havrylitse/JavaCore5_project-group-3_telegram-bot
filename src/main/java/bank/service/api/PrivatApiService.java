@@ -1,4 +1,4 @@
-package bank_api.service;
+package bank.service.api;
 
 import java.io.IOException;
 import java.net.URI;
@@ -10,13 +10,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import bank_api.models.CashCurrency;
-import bank_api.models.ExchangeRate;
-import bank_api.models.PrivatBankResponse;
+import bank.models.CurrencyInfoDTO;
+import bank.models.ExchangeRate;
+import bank.models.PrivatBankResponse;
+import bank.service.cache.BankCacheService;
 import keyboard.comands.CommandBank;
 import keyboard.comands.CommandCurrency;
 
-public class PrivatApiService implements BaseBankApiInterface<PrivatBankResponse> {
+public class PrivatApiService implements BankApiInterface<PrivatBankResponse> {
 
     private static final String PRIVATE_URL_FORMAT = "https://api.privatbank.ua/p24api/exchange_rates?json&date=%s";
 
@@ -44,11 +45,11 @@ public class PrivatApiService implements BaseBankApiInterface<PrivatBankResponse
     }
 
     @Override
-    public CashCurrency getCurrentCurrency(CommandCurrency currency) {
+    public CurrencyInfoDTO getCurrentCurrency(CommandCurrency currency) {
         String key = getKey(currency);
 
-        if (!CashService.getCashCurrencyMap().isEmpty() && CashService.getCashCurrencyMap().containsKey(key)) {
-            CashCurrency lastCashCurrency = CashService.getCashCurrencyMap().get(key);
+        if (!BankCacheService.getCashCurrencyMap().isEmpty() && BankCacheService.getCashCurrencyMap().containsKey(key)) {
+            CurrencyInfoDTO lastCashCurrency = BankCacheService.getCashCurrencyMap().get(key);
 
             if (lastCashCurrency != null && lastCashCurrency.getDate().equals(LocalDate.now())) {
                 return lastCashCurrency;
@@ -57,7 +58,7 @@ public class PrivatApiService implements BaseBankApiInterface<PrivatBankResponse
         List<PrivatBankResponse> bankResponse = getBankCurrency();
         bankResponse.forEach(this::setCurrencyToCash);
 
-        return CashService.getCashCurrencyMap().get(key);
+        return BankCacheService.getCashCurrencyMap().get(key);
     }
 
     private void setCurrencyToCash(PrivatBankResponse bankResponse) {
@@ -65,13 +66,13 @@ public class PrivatApiService implements BaseBankApiInterface<PrivatBankResponse
         List<ExchangeRate> exchangeRates = bankResponse.getExchangeRate();
         exchangeRates.forEach(exchangeRate -> {
             if (CommandCurrency.currencyExists(exchangeRate.getCurrency())) {
-                CashCurrency cashCurrency = new CashCurrency();
+                CurrencyInfoDTO cashCurrency = new CurrencyInfoDTO();
                 cashCurrency.setCurrency(CommandCurrency.valueOf(exchangeRate.getCurrency()));
                 cashCurrency.setDate(LocalDate.now());
                 cashCurrency.setBankName(CommandBank.PRIVAT);
                 cashCurrency.setValueBuy(exchangeRate.getPurchaseRate());
                 cashCurrency.setValueSale(exchangeRate.getSaleRate());
-                CashService.getCashCurrencyMap().put(getKey(cashCurrency.getCurrency()), cashCurrency);
+                BankCacheService.getCashCurrencyMap().put(getKey(cashCurrency.getCurrency()), cashCurrency);
             }
         });
     }

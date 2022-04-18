@@ -7,9 +7,9 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import bank_api.models.MonobankResponse;
-import bank_api.models.NBUResponseItemDTO;
-import bank_api.models.PrivatBankResponse;
+import bank.models.MonobankResponse;
+import bank.models.NBUResponseItemDTO;
+import bank.models.PrivatBankResponse;
 
 public class GsonMapper {
     Gson gson = new Gson();

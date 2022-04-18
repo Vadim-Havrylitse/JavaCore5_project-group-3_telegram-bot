@@ -1,12 +1,13 @@
-package bank_api.service;
+package bank.service;
 
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.util.List;
 
-import bank_api.models.CashCurrency;
-import bank_api.models.PrivatBankResponse;
+import bank.models.CurrencyInfoDTO;
+import bank.models.PrivatBankResponse;
+import bank.service.api.PrivatApiService;
 import keyboard.comands.CommandBank;
 import keyboard.comands.CommandCurrency;
 
@@ -29,7 +30,7 @@ class PrivatApiServiceTest {
 
     @Test
     void getCurrentCurrency() {
-        CashCurrency cashCurrency = privatApiService.getCurrentCurrency(CommandCurrency.GBP);
+        CurrencyInfoDTO cashCurrency = privatApiService.getCurrentCurrency(CommandCurrency.GBP);
         assertNotNull(cashCurrency);
         assertNotEquals(0.0, cashCurrency.getValueBuy());
         assertNotEquals(0.0, cashCurrency.getValueSale());

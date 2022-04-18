@@ -1,12 +1,13 @@
-package bank_api.service;
+package bank.service;
 
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.util.List;
 
-import bank_api.models.CashCurrency;
-import bank_api.models.MonobankResponse;
+import bank.models.CurrencyInfoDTO;
+import bank.models.MonobankResponse;
+import bank.service.api.MonobankApiService;
 import keyboard.comands.CommandBank;
 import keyboard.comands.CommandCurrency;
 
@@ -29,7 +30,7 @@ class MonobankApiServiceTest {
 
     @Test
     void getCurrentCurrency() {
-        CashCurrency cashCurrency = monobankApiService.getCurrentCurrency(CommandCurrency.EUR);
+        CurrencyInfoDTO cashCurrency = monobankApiService.getCurrentCurrency(CommandCurrency.EUR);
         assertNotNull(cashCurrency);
         assertNotEquals(0.0, cashCurrency.getValueBuy());
         assertNotEquals(0.0, cashCurrency.getValueSale());

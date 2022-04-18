@@ -1,11 +1,11 @@
-package bank_api.models;
+package bank.models;
 
 import lombok.Data;
 import lombok.ToString;
 
 @Data
 @ToString
-public class ExchangeRate implements BaseBankResponseInterface {
+public class ExchangeRate implements BankResponseInterface {
     private String baseCurrency;
     private String currency;
     private Double saleRateNB;

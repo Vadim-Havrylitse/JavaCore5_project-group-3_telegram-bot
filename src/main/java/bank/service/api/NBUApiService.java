@@ -1,4 +1,4 @@
-package bank_api.service;
+package bank.service.api;
 
 import java.io.IOException;
 import java.net.URI;
@@ -10,12 +10,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
 
-import bank_api.models.CashCurrency;
-import bank_api.models.NBUResponseItemDTO;
+import bank.models.CurrencyInfoDTO;
+import bank.models.NBUResponseItemDTO;
+import bank.service.cache.BankCacheService;
 import keyboard.comands.CommandBank;
 import keyboard.comands.CommandCurrency;
 
-public class NBUApiService implements BaseBankApiInterface<NBUResponseItemDTO> {
+public class NBUApiService implements BankApiInterface<NBUResponseItemDTO> {
     private static final String API_URL = "https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json";
 
     @Override
@@ -39,11 +40,11 @@ public class NBUApiService implements BaseBankApiInterface<NBUResponseItemDTO> {
     }
 
     @Override
-    public CashCurrency getCurrentCurrency(CommandCurrency currency) {
+    public CurrencyInfoDTO getCurrentCurrency(CommandCurrency currency) {
         String key = getKey(currency);
 
-        if (!CashService.getCashCurrencyMap().isEmpty() && CashService.getCashCurrencyMap().containsKey(key)) {
-            CashCurrency lastCashCurrency = CashService.getCashCurrencyMap().get(key);
+        if (!BankCacheService.getCashCurrencyMap().isEmpty() && BankCacheService.getCashCurrencyMap().containsKey(key)) {
+            CurrencyInfoDTO lastCashCurrency = BankCacheService.getCashCurrencyMap().get(key);
             if (lastCashCurrency != null && lastCashCurrency.getDate().equals(LocalDate.now())) {
                 return lastCashCurrency;
             }
@@ -51,18 +52,18 @@ public class NBUApiService implements BaseBankApiInterface<NBUResponseItemDTO> {
         List<NBUResponseItemDTO> bankResponse = getBankCurrency();
         bankResponse.forEach(this::setCurrencyToCash);
 
-        return CashService.getCashCurrencyMap().get(key);
+        return BankCacheService.getCashCurrencyMap().get(key);
     }
 
     private void setCurrencyToCash(NBUResponseItemDTO bankResponse) {
         if (isAppIncludeCurrency(bankResponse.getCc())) {
-            CashCurrency cashCurrency = new CashCurrency();
+            CurrencyInfoDTO cashCurrency = new CurrencyInfoDTO();
             cashCurrency.setCurrency(CommandCurrency.valueOf(bankResponse.getCc()));
             cashCurrency.setDate(LocalDate.now());
             cashCurrency.setBankName(CommandBank.NBU);
             cashCurrency.setValueBuy(bankResponse.getRate());
 
-            CashService.getCashCurrencyMap().put(getKey(cashCurrency.getCurrency()), cashCurrency);
+            BankCacheService.getCashCurrencyMap().put(getKey(cashCurrency.getCurrency()), cashCurrency);
         }
     }
 

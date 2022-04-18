@@ -1,9 +1,9 @@
-package bank_api.models;
+package bank.models;
 
 import lombok.Data;
 
 @Data
-public class MonobankResponse {
+public class MonobankResponse implements BankResponseInterface {
     private Integer currencyCodeA;
     private Integer currencyCodeB;
     private Long date;

@@ -1,4 +1,4 @@
-package bank_api.models;
+package bank.models;
 
 import java.util.List;
 
@@ -7,7 +7,7 @@ import lombok.ToString;
 
 @ToString
 @Data
-public class PrivatBankResponse implements BaseBankResponseInterface {
+public class PrivatBankResponse implements BankResponseInterface {
     private String date;
     private String bank;
     private Integer baseCurrency;

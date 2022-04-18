@@ -1,4 +1,4 @@
-package bank_api.service;
+package bank.service.api;
 
 import java.io.IOException;
 import java.net.URI;
@@ -10,12 +10,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import bank_api.models.CashCurrency;
-import bank_api.models.MonobankResponse;
+import bank.models.CurrencyInfoDTO;
+import bank.models.MonobankResponse;
+import bank.service.cache.BankCacheService;
 import keyboard.comands.CommandBank;
 import keyboard.comands.CommandCurrency;
 
-public class MonobankApiService implements BaseBankApiInterface<MonobankResponse> {
+public class MonobankApiService implements BankApiInterface<MonobankResponse> {
     private static final String MONO_URL = "https://api.monobank.ua/bank/currency";
 
     @Override
@@ -41,33 +42,36 @@ public class MonobankApiService implements BaseBankApiInterface<MonobankResponse
     }
 
     @Override
-    public CashCurrency getCurrentCurrency(CommandCurrency currency) {
+    public CurrencyInfoDTO getCurrentCurrency(CommandCurrency currency) {
         String key = getKey(currency);
-        if (!CashService.getCashCurrencyMap().isEmpty() && CashService.getCashCurrencyMap().containsKey(key)) {
-            CashCurrency lastCashCurrency = CashService.getCashCurrencyMap().get(key);
+
+        if (!BankCacheService.getCashCurrencyMap().isEmpty() && BankCacheService.getCashCurrencyMap().containsKey(key)) {
+            CurrencyInfoDTO lastCashCurrency = BankCacheService.getCashCurrencyMap().get(key);
             if (lastCashCurrency != null && lastCashCurrency.getDate().equals(LocalDate.now())) {
                 return lastCashCurrency;
             }
         }
         List<MonobankResponse> bankResponse = getBankCurrency();
         bankResponse.forEach(this::setCurrencyToCash);
-        return CashService.getCashCurrencyMap().get(key);
+
+        return BankCacheService.getCashCurrencyMap().get(key);
     }
 
     private void setCurrencyToCash(MonobankResponse bankResponse) {
         // нужно проверять есть ли получаемая валюта от банка среди енама наших валют
         String bankResponseCodeA = bankResponse.getCurrencyCodeA().toString();
         Optional<CommandCurrency> currency = Arrays.stream(CommandCurrency.values()).filter(x -> x.getCodeISOL().equals(bankResponseCodeA)).findFirst();
+
         // нужно также проверять чтобы только к гривне были все результаты
         if (currency.isPresent() && bankResponse.getCurrencyCodeB().equals(Integer.valueOf("980"))) {
-            CashCurrency cashCurrency = new CashCurrency();
+            CurrencyInfoDTO cashCurrency = new CurrencyInfoDTO();
             cashCurrency.setCurrency(currency.get());
             cashCurrency.setDate(LocalDate.now());
             cashCurrency.setBankName(CommandBank.MONO);
             // нужно предусмотреть что у банка нужные нам валюты могут быть, но продажа/покупка заморожена и приходит значение null
             cashCurrency.setValueBuy(bankResponse.getRateBuy() != null ? bankResponse.getRateBuy() : Double.valueOf(0));
             cashCurrency.setValueSale(bankResponse.getRateSell() != null ? bankResponse.getRateSell() : Double.valueOf(0));
-            CashService.getCashCurrencyMap().put(getKey(cashCurrency.getCurrency()), cashCurrency);
+            BankCacheService.getCashCurrencyMap().put(getKey(cashCurrency.getCurrency()), cashCurrency);
         }
     }
 
