@@ -1,17 +1,14 @@
 package telegramService;
 
 import keyboard.Commands;
-import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
-import user.UserService;
-import user.UserServiceImpl;
 import keyboard.Keyboard;
-import keyboard.comands.CommandMain;
-import keyboard.comands.CommandSettings;
 import keyboard.comands.*;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import user.UserService;
 import utils.PropertiesLoad;
 
 import java.util.ArrayList;

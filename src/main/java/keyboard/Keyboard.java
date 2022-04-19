@@ -1,12 +1,11 @@
 package keyboard;
 
-import user.UserService;
-import user.UserServiceImpl;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import user.UserService;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Keyboard {
 

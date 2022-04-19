@@ -1,9 +1,8 @@
 package keyboard;
 
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import user.UserService;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import telegramService.TelegramApi;
+import user.UserService;
 
 public interface Commands {
 

@@ -37,8 +37,6 @@ public enum CommandNotification implements Commands {
     public void pressButton(TelegramApi bot, CallbackQuery callbackQuery, UserService userService) {
         Long chatId = callbackQuery.getMessage().getChatId();
 
-        Message message = callbackQuery.getMessage();
-
         if (callbackQuery.getData().equals(NOTIFICATION_OFF.callbackData)){
             userService.changeSchedule(chatId, NOTIFICATION_OFF);
             Planner.schedulerStop(chatId);

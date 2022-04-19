@@ -58,17 +58,18 @@ public class MonobankApiService implements BankApiInterface<MonobankResponse> {
     }
 
     private void setCurrencyToCash(MonobankResponse bankResponse) {
-        // нужно проверять есть ли получаемая валюта от банка среди енама наших валют
+        // you need to check if the received currency from the bank is among the enam of our currencies
         String bankResponseCodeA = bankResponse.getCurrencyCodeA().toString();
         Optional<CommandCurrency> currency = Arrays.stream(CommandCurrency.values()).filter(x -> x.getCodeISOL().equals(bankResponseCodeA)).findFirst();
 
-        // нужно также проверять чтобы только к гривне были все результаты
+        // you also need to check that all the results are only for the hryvnia
         if (currency.isPresent() && bankResponse.getCurrencyCodeB().equals(Integer.valueOf("980"))) {
             CurrencyInfoDTO cashCurrency = new CurrencyInfoDTO();
             cashCurrency.setCurrency(currency.get());
             cashCurrency.setDate(LocalDate.now());
             cashCurrency.setBankName(CommandBank.MONO);
-            // нужно предусмотреть что у банка нужные нам валюты могут быть, но продажа/покупка заморожена и приходит значение null
+
+            // we need to foresee that the bank may have the currencies we need, but the sale / purchase is frozen and the null value comes
             cashCurrency.setValueBuy(bankResponse.getRateBuy() != null ? bankResponse.getRateBuy() : Double.valueOf(0));
             cashCurrency.setValueSale(bankResponse.getRateSell() != null ? bankResponse.getRateSell() : Double.valueOf(0));
             BankCacheService.getCashCurrencyMap().put(getKey(cashCurrency.getCurrency()), cashCurrency);

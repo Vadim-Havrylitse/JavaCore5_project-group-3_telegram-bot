@@ -1,8 +1,6 @@
 package keyboard.comands;
 
 import keyboard.Commands;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import user.UserService;
 import keyboard.Keyboard;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,6 +9,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import telegramService.TelegramApi;
+import user.UserService;
 
 @Getter
 @AllArgsConstructor
