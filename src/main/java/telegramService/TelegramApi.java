@@ -21,7 +21,10 @@ public class TelegramApi extends TelegramLongPollingBot {
 
     private final UserService userService = UserService.of();
 
-    public static List<Commands> commandsBase = new ArrayList<>();
+    private static final List<Commands> commandsBase = new ArrayList<>();
+
+    private static final String textAnswerWhenWriteUnknownSymbol = "Для работы со мной пользуйтесь клавиатурой под сообщениями.";
+    private static final String textAnswerWhenWriteStart = "Добро пожаловать! Этот бот предназначен для информирования Вас о курсе нужных валют от нужных вам банков.";
 
     static {
         commandsBase.addAll(List.of(CommandMain.values()));
@@ -30,7 +33,6 @@ public class TelegramApi extends TelegramLongPollingBot {
         commandsBase.addAll(List.of(CommandCurrency.values()));
         commandsBase.addAll(List.of(CommandNotification.values()));
         commandsBase.addAll(List.of(CommandAccuracy.values()));
-
     }
 
     @Override
@@ -48,8 +50,9 @@ public class TelegramApi extends TelegramLongPollingBot {
 
         if (update.hasMessage() && update.getMessage().hasText()) {
             SendMessage message = new SendMessage();
-            if (!userService.isUserPresent(update.getMessage())){
-                    userService.addUser(update.getMessage());
+
+            if (!userService.isUserPresent(update.getMessage().getChatId())){
+                    userService.addUser(update.getMessage().getChatId());
                 }
 
             for (Commands el : commandsBase){
@@ -57,18 +60,19 @@ public class TelegramApi extends TelegramLongPollingBot {
                     CallbackQuery myCallbackQuery = new CallbackQuery();
                     myCallbackQuery.setData(update.getMessage().getText());
                     myCallbackQuery.setMessage(update.getMessage());
-                    el.pressButton(this,myCallbackQuery, userService);
+                    el.pressButton(this, myCallbackQuery, userService);
                     return;
                 }
             }
 
             if (update.getMessage().getText().equals("/start")){
-                message.setText("Добро пожаловать! Этот бот предназначен для информирования Вас о курсе нужных валют от нужных вам банков.");
+                message.setText(textAnswerWhenWriteStart);
             }else {
-                message.setText("Для работы со мной пользуйтесь клавиатурой под сообщениями.");
+                message.setText(textAnswerWhenWriteUnknownSymbol);
             }
                 message.setChatId(update.getMessage().getChatId().toString());
                 message.setReplyMarkup(Keyboard.createKeyboardInOneColumn(CommandMain.values()));
+
             try {
                 execute(message);
             } catch (TelegramApiException e) {

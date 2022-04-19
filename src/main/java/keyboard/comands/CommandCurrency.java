@@ -39,14 +39,15 @@ public enum CommandCurrency implements Commands {
     @SneakyThrows
     @Override
     public void pressButton(TelegramApi bot, CallbackQuery callbackQuery, UserService userService) {
+        Long chatId = callbackQuery.getMessage().getChatId();
+
+        userService.changeCurrency(chatId, this);
+
         EditMessageReplyMarkup answerMessage = new EditMessageReplyMarkup();
-
-        userService.changeCurrency(callbackQuery.getMessage(), this);
-
         answerMessage.setChatId(callbackQuery.getMessage().getChatId().toString());
         answerMessage.setMessageId(callbackQuery.getMessage().getMessageId());
         answerMessage.setReplyMarkup(
-                Keyboard.createKeyboardWithMark(userService.getUser(callbackQuery.getMessage()).getCurrency(), CommandCurrency.values()));
+                Keyboard.createKeyboardWithMark(userService.getUser(chatId).getCurrency(), CommandCurrency.values()));
 
         bot.execute(answerMessage);
     }

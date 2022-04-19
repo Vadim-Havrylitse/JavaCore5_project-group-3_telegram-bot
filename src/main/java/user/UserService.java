@@ -12,17 +12,17 @@ public interface UserService {
         return new UserServiceImpl();
     }
 
-    void changeSchedule(Message message, CommandNotification time);
+    void changeSchedule(Long chatId, CommandNotification time);
 
-    void changeBank(Message message, CommandBank bank);
+    void changeBank(Long chatId, CommandBank bank);
 
-    void changeAccuracy(Message message, CommandAccuracy accuracy);
+    void changeAccuracy(Long chatId, CommandAccuracy accuracy);
 
-    void changeCurrency(Message message, CommandCurrency currency);
+    void changeCurrency(Long chatId, CommandCurrency currency);
 
-    User getUser(Message message);
+    User getUser(Long chatId);
 
-    void addUser(Message message);
+    void addUser(Long chatId);
 
-    boolean isUserPresent (Message message);
+    boolean isUserPresent (Long chatId);
 }

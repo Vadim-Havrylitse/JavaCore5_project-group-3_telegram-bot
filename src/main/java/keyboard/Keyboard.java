@@ -72,8 +72,8 @@ public class Keyboard {
         return answer;
     }
 
-    public static InlineKeyboardMarkup createKeyboardForTimeAlert(Message message, UserService userService, Commands[] arrTimeAlert) {
-        Commands timeAlert = userService.getUser(message).getNotificationTime();
+    public static InlineKeyboardMarkup createKeyboardForTimeAlert(Long chatId, UserService userService, Commands[] arrTimeAlert) {
+        Commands timeAlert = userService.getUser(chatId).getNotificationTime();
 
         InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
 

@@ -34,21 +34,24 @@ public enum CommandMain implements Commands {
     @SneakyThrows
     @Override
     public void pressButton(TelegramApi bot, CallbackQuery callbackQuery, UserService userService) {
+        Long chatId = callbackQuery.getMessage().getChatId();
+
         SendMessage answerMessage = new SendMessage();
         InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
         switch (this){
             case GETINFO:
                 keyboardMarkup = Keyboard.createKeyboardInOneColumn(CommandMain.values());
                 answerMessage.setParseMode(ParseMode.HTML);
-                answerMessage.setText(buildGetInfoMessage(userService.getUser(callbackQuery.getMessage())));
+                answerMessage.setText(buildGetInfoMessage(userService.getUser(chatId)));
                 break;
             case SETTINGS:
                 keyboardMarkup = Keyboard.createKeyboardInOneColumn(CommandSettings.values());
                 answerMessage.setText(this.messageAfterPressButton);
                 break;
         }
-        answerMessage.setChatId(callbackQuery.getMessage().getChatId().toString());
+        answerMessage.setChatId(chatId.toString());
         answerMessage.setReplyMarkup(keyboardMarkup);
+
         bot.execute(answerMessage);
     }
 

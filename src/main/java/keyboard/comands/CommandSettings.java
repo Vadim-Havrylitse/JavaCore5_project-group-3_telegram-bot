@@ -17,16 +17,16 @@ import telegramService.TelegramApi;
 public enum CommandSettings implements Commands {
     ACCURACY("Кол-во знаков после зяпятой",
             "/accuracy",
-            "Выберите желаемое количество:"),
+            "Выберите желаемую точность в данных курса валют:"),
     BANK("Банк",
             "/bank",
             "Выберите желаемый банк:"),
     CURRENCY("Валюта",
             "/currency",
             "Выберите желаемую валюту:"),
-    NOTIFICATION("Время оповещения",
+    NOTIFICATION("Время ежедневного оповещения",
             "/notification",
-            "Выберите время оповещения:");
+            "В заданое время я каждый день буду присылать Вам актуальную информация о курсе валют.\n\n Выберите время ежедневного оповещения:");
 
     private final String title;
     private final String callbackData;
@@ -35,23 +35,22 @@ public enum CommandSettings implements Commands {
     @SneakyThrows
     @Override
     public void pressButton(TelegramApi bot, CallbackQuery callbackQuery, UserService userService) {
+        Long chatId = callbackQuery.getMessage().getChatId();
+
         SendMessage answerMessage = new SendMessage();
         InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
         switch (this){
             case ACCURACY:
-                //userServiceImpl.getUser(callbackQuery.getMessage()).getNumberOfSymbols;
-                keyboardMarkup = Keyboard.createKeyboardWithMark(userService.getUser(callbackQuery.getMessage()).getAccuracy(), CommandAccuracy.values());
+                keyboardMarkup = Keyboard.createKeyboardWithMark(userService.getUser(chatId).getAccuracy(), CommandAccuracy.values());
                 break;
             case BANK:
-                //userServiceImpl.getUser(callbackQuery.getMessage()).getBank;
-                keyboardMarkup = Keyboard.createKeyboardWithMark(userService.getUser(callbackQuery.getMessage()).getBank(), CommandBank.values());
+                keyboardMarkup = Keyboard.createKeyboardWithMark(userService.getUser(chatId).getBank(), CommandBank.values());
                 break;
             case CURRENCY:
-                //userServiceImpl.getUser(callbackQuery.getMessage()).getCurrency;
-                keyboardMarkup = Keyboard.createKeyboardWithMark(userService.getUser(callbackQuery.getMessage()).getCurrency(), CommandCurrency.values());
+                keyboardMarkup = Keyboard.createKeyboardWithMark(userService.getUser(chatId).getCurrency(), CommandCurrency.values());
                 break;
             case NOTIFICATION:
-                keyboardMarkup = Keyboard.createKeyboardForTimeAlert(callbackQuery.getMessage(), userService, CommandNotification.values());
+                keyboardMarkup = Keyboard.createKeyboardForTimeAlert(chatId, userService, CommandNotification.values());
                 break;
         }
         answerMessage.setChatId(callbackQuery.getMessage().getChatId().toString());

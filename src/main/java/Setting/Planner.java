@@ -1,7 +1,6 @@
 package Setting;
 
 import keyboard.comands.CommandMain;
-import keyboard.comands.CommandNotification;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import telegramService.TelegramApi;
 import user.UserService;
@@ -10,7 +9,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Map;
-import java.util.concurrent.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class Planner {
 
@@ -20,7 +22,6 @@ public class Planner {
         long chatId = callbackQuery.getMessage().getChatId();
 
         if (schedulerPool.containsKey(chatId)){
-            System.out.println("next stop from schedulerReload");
             schedulerStop(chatId);
         }
 
@@ -42,7 +43,6 @@ public class Planner {
     }
 
     public static void schedulerStop(long chatId){
-        System.out.println("stop scheduler");
         schedulerPool.get(chatId).shutdown();
         schedulerPool.remove(chatId);
     }

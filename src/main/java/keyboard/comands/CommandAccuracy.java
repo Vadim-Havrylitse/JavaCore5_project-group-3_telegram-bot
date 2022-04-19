@@ -15,30 +15,28 @@ import telegramService.TelegramApi;
 public enum CommandAccuracy implements Commands {
 
     TWO("2",
-            "2",
-            "Ок, выбрали 2"),
+            "2"),
     THREE("3",
-            "3",
-            "Ок, выбрали 3"),
+            "3"),
     FOUR("4",
-            "4",
-            "Ок, выбрали 4");
+            "4");
 
     private final String title;
     private final String callbackData;
-    private final String messageAfterPressButton;
 
     @SneakyThrows
     @Override
     public void pressButton(TelegramApi bot, CallbackQuery callbackQuery, UserService userService) {
+        Long chatId = callbackQuery.getMessage().getChatId();
+
+        userService.changeAccuracy(chatId, this);
+
         EditMessageReplyMarkup answerMessage = new EditMessageReplyMarkup();
 
-        userService.changeAccuracy(callbackQuery.getMessage(), this);
-
-        answerMessage.setChatId(callbackQuery.getMessage().getChatId().toString());
+        answerMessage.setChatId(chatId.toString());
         answerMessage.setMessageId(callbackQuery.getMessage().getMessageId());
         answerMessage.setReplyMarkup(
-                Keyboard.createKeyboardWithMark(userService.getUser(callbackQuery.getMessage()).getAccuracy(), CommandAccuracy.values()));
+                Keyboard.createKeyboardWithMark(userService.getUser(chatId).getAccuracy(), CommandAccuracy.values()));
 
         bot.execute(answerMessage);
     }

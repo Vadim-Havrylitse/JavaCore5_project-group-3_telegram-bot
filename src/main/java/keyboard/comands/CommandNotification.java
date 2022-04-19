@@ -35,16 +35,17 @@ public enum CommandNotification implements Commands {
     @SneakyThrows
     @Override
     public void pressButton(TelegramApi bot, CallbackQuery callbackQuery, UserService userService) {
+        Long chatId = callbackQuery.getMessage().getChatId();
 
         Message message = callbackQuery.getMessage();
 
         if (callbackQuery.getData().equals(NOTIFICATION_OFF.callbackData)){
-            userService.changeSchedule(message, NOTIFICATION_OFF);
-            Planner.schedulerStop(callbackQuery.getMessage().getChatId());
+            userService.changeSchedule(chatId, NOTIFICATION_OFF);
+            Planner.schedulerStop(chatId);
         }else {
             for (CommandNotification time : CommandNotification.values()) {
                 if (callbackQuery.getData().equals(time.callbackData)) {
-                    userService.changeSchedule(message, time);
+                    userService.changeSchedule(chatId, time);
                     Planner.schedulerReload(bot, callbackQuery, userService);
                     break;
                 }
@@ -52,9 +53,9 @@ public enum CommandNotification implements Commands {
         }
 
         EditMessageReplyMarkup answerMessage = new EditMessageReplyMarkup();
-        answerMessage.setMessageId(message.getMessageId());
-        answerMessage.setChatId(message.getChatId().toString());
-        answerMessage.setReplyMarkup(Keyboard.createKeyboardForTimeAlert(message, userService, CommandNotification.values()));
+        answerMessage.setMessageId(callbackQuery.getMessage().getMessageId());
+        answerMessage.setChatId(chatId.toString());
+        answerMessage.setReplyMarkup(Keyboard.createKeyboardForTimeAlert(chatId, userService, CommandNotification.values()));
 
         bot.execute(answerMessage);
     }

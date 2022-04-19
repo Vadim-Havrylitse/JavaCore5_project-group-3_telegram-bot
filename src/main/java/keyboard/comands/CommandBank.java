@@ -27,15 +27,17 @@ public enum CommandBank implements Commands {
     @SneakyThrows
     @Override
     public void pressButton(TelegramApi bot, CallbackQuery callbackQuery, UserService userService) {
-        EditMessageReplyMarkup answerMessage = new EditMessageReplyMarkup();
-        Message message = callbackQuery.getMessage();
-        userService.changeBank(message, this);
+        Long chatId = callbackQuery.getMessage().getChatId();
 
-        answerMessage.setChatId(callbackQuery.getMessage().getChatId().toString());
+        userService.changeBank(chatId, this);
+
+        EditMessageReplyMarkup answerMessage = new EditMessageReplyMarkup();
+
+        answerMessage.setChatId(chatId.toString());
         answerMessage.setMessageId(callbackQuery.getMessage().getMessageId());
         answerMessage.setReplyMarkup(
                 Keyboard.createKeyboardWithMark(
-                        userService.getUser(callbackQuery.getMessage()).getBank(), CommandBank.values()));
+                        userService.getUser(chatId).getBank(), CommandBank.values()));
 
        bot.execute(answerMessage);
     }

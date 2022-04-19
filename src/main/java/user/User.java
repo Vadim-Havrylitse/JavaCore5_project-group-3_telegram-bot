@@ -2,12 +2,16 @@ package user;
 
 import keyboard.Commands;
 import keyboard.comands.*;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
+@Setter(AccessLevel.PACKAGE)
 public class User {
     private final Long chatId;
     private List<Commands> bank;
