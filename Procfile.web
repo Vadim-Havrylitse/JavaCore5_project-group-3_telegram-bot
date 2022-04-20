@@ -1,1 +1,1 @@
-web: java -Dserver.port=$PORT -jar out/artifacts/JavaCore5_progect_group_3_telegram_bot_jar/JavaCore5_progect_group_3_telegram_bot_jar.jar
+web: java -Dserver.port=$PORT -jar JavaCore5_progect_group_3_telegram_bot_jar.jar
