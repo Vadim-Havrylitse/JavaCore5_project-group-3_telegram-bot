@@ -15,7 +15,9 @@ import bank.models.MonobankResponse;
 import bank.service.cache.BankCacheService;
 import keyboard.comands.CommandBank;
 import keyboard.comands.CommandCurrency;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class MonobankApiService implements BankApiInterface<MonobankResponse> {
     private static final String MONO_URL = "https://api.monobank.ua/bank/currency";
 
@@ -43,6 +45,7 @@ public class MonobankApiService implements BankApiInterface<MonobankResponse> {
 
     @Override
     public CurrencyInfoDTO getCurrentCurrency(CommandCurrency currency) {
+        log.info("Getting currency for: {}", currency);
         String key = getKey(currency);
 
         if (!BankCacheService.getCashCurrencyMap().isEmpty() && BankCacheService.getCashCurrencyMap().containsKey(key)) {
@@ -57,7 +60,7 @@ public class MonobankApiService implements BankApiInterface<MonobankResponse> {
         return BankCacheService.getCashCurrencyMap().get(key);
     }
 
-    private void setCurrencyToCash(MonobankResponse bankResponse) {
+    private void setCurrencyToCash(MonobankResponse bankResponse) {//comments - good, but preferably in english
         // you need to check if the received currency from the bank is among the enam of our currencies
         String bankResponseCodeA = bankResponse.getCurrencyCodeA().toString();
         Optional<CommandCurrency> currency = Arrays.stream(CommandCurrency.values()).filter(x -> x.getCodeISOL().equals(bankResponseCodeA)).findFirst();
