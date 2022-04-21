@@ -32,6 +32,8 @@ dependencies {
     annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.22'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
+    implementation group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.25'
 
 }
 
