@@ -9,8 +9,9 @@ import bank.service.information_message.renderer.DefaultBankInfoMessageRenderer;
 import bank.service.information_message.renderer.NBUInfoMessageRenderer;
 import bank.service.information_message.renderer.RenderableInterface;
 import keyboard.comands.CommandBank;
+import lombok.extern.slf4j.Slf4j;
 import user.User;
-
+@Slf4j
 public class BankInformationMessageBuilder implements InformationMessageBuilderInterface {
     private final Map<CommandBank, List<CurrencyInfoDTO>> usersCurrenciesMapByBank;
     private final User user;
@@ -22,6 +23,7 @@ public class BankInformationMessageBuilder implements InformationMessageBuilderI
 
     @Override
     public String build() {
+        log.info("Started build for BankInformationMessageBuilder");
         StringBuilder stringBuilder = new StringBuilder();
         Set<CommandBank> banks = usersCurrenciesMapByBank.keySet();
         int count = 0;

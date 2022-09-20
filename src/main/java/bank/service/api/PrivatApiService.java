@@ -16,7 +16,9 @@ import bank.models.PrivatBankResponse;
 import bank.service.cache.BankCacheService;
 import keyboard.comands.CommandBank;
 import keyboard.comands.CommandCurrency;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class PrivatApiService implements BankApiInterface<PrivatBankResponse> {
 
     private static final String PRIVATE_URL_FORMAT = "https://api.privatbank.ua/p24api/exchange_rates?json&date=%s";
@@ -46,7 +48,8 @@ public class PrivatApiService implements BankApiInterface<PrivatBankResponse> {
 
     @Override
     public CurrencyInfoDTO getCurrentCurrency(CommandCurrency currency) {
-        String key = getKey(currency);
+        log.info("Getting currency for: {}", currency);
+        String key = getKey(currency);//
 
         if (!BankCacheService.getCashCurrencyMap().isEmpty() && BankCacheService.getCashCurrencyMap().containsKey(key)) {
             CurrencyInfoDTO lastCashCurrency = BankCacheService.getCashCurrencyMap().get(key);

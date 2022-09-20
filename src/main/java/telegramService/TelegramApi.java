@@ -3,6 +3,7 @@ package telegramService;
 import keyboard.Commands;
 import keyboard.Keyboard;
 import keyboard.comands.*;
+import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
@@ -13,7 +14,7 @@ import utils.PropertiesLoad;
 
 import java.util.ArrayList;
 import java.util.List;
-
+@Slf4j
 public class TelegramApi extends TelegramLongPollingBot {
 
     private final UserService userService = UserService.of();
@@ -44,11 +45,12 @@ public class TelegramApi extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-
         if (update.hasMessage() && update.getMessage().hasText()) {
+            log.info("Received message in update: {}", update.getMessage().hasText());
             SendMessage message = new SendMessage();
 
             if (!userService.isUserPresent(update.getMessage().getChatId())){
+                log.info("Adding user to the user service");
                     userService.addUser(update.getMessage().getChatId());
                 }
 
@@ -73,11 +75,12 @@ public class TelegramApi extends TelegramLongPollingBot {
             try {
                 execute(message);
             } catch (TelegramApiException e) {
-                e.printStackTrace();
+                log.error("TelegramApiException has appeared: ", e);
             }
         }
 
         if (update.hasCallbackQuery()) {
+            log.info("Received callBackQuery in update");
             String updateCallbackData = update.getCallbackQuery().getData();
 
             for (Commands el : commandsBase){

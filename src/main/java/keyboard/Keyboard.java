@@ -25,7 +25,7 @@ public class Keyboard {
     }
 
     public static InlineKeyboardMarkup createKeyboardWithMark(Commands commandsFromUser, Commands[] arrCommandsForButtons){
-        InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
+        InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();//
         List<List<InlineKeyboardButton>> rowsButton = new ArrayList<>();
         for (Commands element : arrCommandsForButtons) {
             rowsButton.add(
@@ -78,11 +78,14 @@ public class Keyboard {
 
         List<List<InlineKeyboardButton>> rowsList = new ArrayList<>();
         for (int i = 0; i < ((int) Math.ceil(arrTimeAlert.length / 3f)); i++) {
+            //
             List<InlineKeyboardButton> keyboardButtonsRow = new ArrayList<>();
+            //
             for (int j = 0; j < 3; j++) {
                 if ((i * 3 + j) == arrTimeAlert.length) {
                     break;
                 }
+                //
                 Commands command = arrTimeAlert[i * 3 + j];
                 String commandTitle = command.getTitle();
                 InlineKeyboardButton button = new InlineKeyboardButton();

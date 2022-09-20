@@ -41,7 +41,7 @@ public class NBUApiService implements BankApiInterface<NBUResponseItemDTO> {
 
     @Override
     public CurrencyInfoDTO getCurrentCurrency(CommandCurrency currency) {
-        String key = getKey(currency);
+        String key = getKey(currency);//
 
         if (!BankCacheService.getCashCurrencyMap().isEmpty() && BankCacheService.getCashCurrencyMap().containsKey(key)) {
             CurrencyInfoDTO lastCashCurrency = BankCacheService.getCashCurrencyMap().get(key);

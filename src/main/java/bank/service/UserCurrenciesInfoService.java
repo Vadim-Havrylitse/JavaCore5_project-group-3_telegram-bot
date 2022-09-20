@@ -14,8 +14,10 @@ import bank.service.information_message.BankInformationMessageBuilder;
 import keyboard.Commands;
 import keyboard.comands.CommandBank;
 import keyboard.comands.CommandCurrency;
+import lombok.extern.slf4j.Slf4j;
 import user.User;
 
+@Slf4j
 public class UserCurrenciesInfoService {
     private final BankApiFactory bankApiFactory = new BankApiFactory();
     private final User user;
@@ -26,6 +28,7 @@ public class UserCurrenciesInfoService {
     }
 
     public String getInformation() {
+        log.info("Getting information");
         Map<CommandBank, List<CurrencyInfoDTO>> usersCurrenciesMap = getUsersCurrenciesMapByBanks();
 
         return buildInformationMessage(usersCurrenciesMap);
