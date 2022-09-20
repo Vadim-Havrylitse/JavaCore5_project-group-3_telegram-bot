@@ -25,7 +25,7 @@ class MonobankApiServiceTest {
         System.out.println("monobankBankResponseList = " + monobankBankResponseList);
         //assertFalse(monobankBankResponseList.isEmpty());
         assertEquals(840, monobankBankResponseList.get(0).getCurrencyCodeA());
-        monobankBankResponseList.forEach(System.out::println);
+        //monobankBankResponseList.forEach(System.out::println);
     }
 
     @Test

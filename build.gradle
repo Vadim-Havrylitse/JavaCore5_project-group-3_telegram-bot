@@ -1,9 +1,12 @@
 plugins {
     id 'java'
     id 'application'
+    id("io.ktor.plugin") version "2.1.1"
 }
 
-mainClassName = 'AppLauncher'
+application {
+    mainClass.set("AppLauncher")
+}
 
 group 'org.example'
 version '1.0-SNAPSHOT'
@@ -43,4 +46,10 @@ compileJava.options.encoding = 'UTF-8'
 
 tasks.withType(JavaCompile){
     options.encoding("UTF-8")
+}
+
+ktor {
+    fatJar {
+        archiveFileName.set("Telegram-bot.jar")
+    }
 }

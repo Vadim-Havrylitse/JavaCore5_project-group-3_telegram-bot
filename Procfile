@@ -1,1 +1,1 @@
-web: java -Dserver.port=$PORT $JAVA_OPTS -jar JavaCore5_progect-group-3_telegram-bot.jar
+web: java -jar Telegram-bot.jar
